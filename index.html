@@ -1,0 +1,991 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Programmes 2027</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout : guide civique — ouverture avec « bulletin » daté, onglets collants,
+   état des lieux chiffré d'abord, puis vues en cartes (profil, thème, fiche). */
+:root{
+  --bg:#F2F4F7; --paper:#FFFFFF; --ink:#101A2B; --ink-2:#3A4658; --muted:#667185; --line:#DFE4EB;
+  --accent:#2348A8; --accent-soft:#E7ECF8; --red:#C23A32;
+  --gain:#2F7A55; --gain-soft:#E6F2EB; --cost:#A35A12; --cost-soft:#F7EDE0; --q:#5D4F9A; --q-soft:#EEEBF7;
+  --shadow:0 1px 2px rgba(16,26,43,.05),0 8px 24px -12px rgba(16,26,43,.12);
+  --f-display:"Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0B1019; --paper:#121A26; --ink:#E8EDF4; --ink-2:#C1CAD6; --muted:#8D98A8; --line:#263142;
+  --accent:#93AEF2; --accent-soft:#1A2540; --red:#F0857C;
+  --gain:#7CC9A0; --gain-soft:#132A20; --cost:#E5AE6E; --cost-soft:#2E2214; --q:#B9AEF0; --q-soft:#211D36;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0B1019; --paper:#121A26; --ink:#E8EDF4; --ink-2:#C1CAD6; --muted:#8D98A8; --line:#263142;
+  --accent:#93AEF2; --accent-soft:#1A2540; --red:#F0857C;
+  --gain:#7CC9A0; --gain-soft:#132A20; --cost:#E5AE6E; --cost-soft:#2E2214; --q:#B9AEF0; --q-soft:#211D36;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px -14px rgba(0,0,0,.6); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:80px}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px));padding-block:0 56px;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1200px;margin:0 auto}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2.serif{font-family:var(--f-display);font-weight:400;letter-spacing:-.01em;line-height:1.02}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.label{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted);max-width:80ch;margin:0}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+
+/* ouverture */
+.hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:32px;align-items:end;padding-block:40px 28px}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr);gap:22px;padding-block:28px 20px}}
+.hero h1{font-size:clamp(44px,7vw,84px)}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero .lede{font-size:17px;color:var(--ink-2);max-width:56ch;margin:16px 0 0}
+.ballot{padding:20px 22px;display:grid;gap:14px;position:relative;overflow:hidden}
+.ballot::after{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,var(--accent) 0 33.3%,var(--line) 33.3% 66.6%,var(--red) 66.6%)}
+.ballot .rounds{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.round b{display:block;font-family:var(--f-display);font-size:34px;font-weight:400;line-height:1}
+.round span{font-size:13px;color:var(--muted)}
+.ballot .cd{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--line);padding-top:12px}
+.ballot .cd b{font-family:var(--f-mono);font-size:22px;color:var(--red);font-weight:500}
+.faces{display:flex;flex-wrap:wrap;gap:8px;padding-bottom:20px}
+.face{display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 12px 4px 4px;cursor:pointer;font-size:14px;font-weight:500;transition:transform .15s ease,border-color .15s}
+.face:hover{transform:translateY(-1px);border-color:var(--muted)}
+.av{--c:#666;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--c);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.02em;flex:none}
+.av.lg{width:64px;height:64px;font-size:21px}
+
+/* onglets */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding-block:10px;margin-bottom:6px}
+.tabs-in{display:flex;gap:4px;overflow-x:auto;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:4px;scrollbar-width:none}
+.tabs-in a{text-decoration:none;color:var(--ink-2);padding:9px 16px;border-radius:9px;white-space:nowrap;font-weight:600;font-size:14.5px}
+.tabs-in a:hover{background:var(--accent-soft)}
+.tabs-in a[aria-current="page"]{background:var(--ink);color:var(--bg)}
+
+section.view{display:grid;gap:22px;padding-block:18px}
+.vhead{display:grid;gap:6px;max-width:80ch}
+.vhead h2{font-size:clamp(32px,4.4vw,48px)}
+.vhead p{margin:0;color:var(--ink-2)}
+
+/* situation */
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:12px}
+.kpi{padding:16px 18px;display:grid;gap:4px;align-content:start}
+.kpi .v{font-family:var(--f-display);font-size:44px;line-height:1;letter-spacing:-.01em}
+.kpi .v small{font-size:22px}
+.kpi .t{font-weight:600;font-size:14.5px}
+.kpi .s{font-size:13.5px;color:var(--muted)}
+.kpi.alert .v{color:var(--red)}
+.meter{height:8px;border-radius:4px;background:var(--bg);position:relative;margin-top:8px}
+.meter i{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--red)}
+.meter b{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.explain{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+.explain .blk p{margin:0;font-size:15px;color:var(--ink-2)}
+.real-wrap{overflow-x:auto}
+table.real{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+table.real th,table.real td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+table.real th{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+table.real tr:last-child td{border-bottom:0}
+table.real td.who{display:flex;align-items:center;gap:10px;font-weight:600;white-space:nowrap}
+.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600;white-space:nowrap}
+.lv-low{background:var(--gain-soft);color:var(--gain)}
+.lv-mid{background:var(--q-soft);color:var(--q)}
+.lv-high{background:var(--cost-soft);color:var(--cost)}
+
+/* puces */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 14px;font-size:14px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{border-color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--paper)}
+.chip.mini{padding:3px 10px 3px 3px;font-size:13px}
+.chip.mini .av{width:22px;height:22px;font-size:9px}
+.chip.mini[aria-pressed="false"]{opacity:.55}
+.chip.mini[aria-pressed="true"]{background:var(--paper);color:var(--ink);border-color:var(--ink-2);opacity:1}
+.filters{display:grid;gap:10px}
+.intro{padding:18px 20px;display:grid;gap:6px;background:var(--accent-soft);border-radius:14px}
+.intro h3{font-family:var(--f-display);font-weight:400;font-size:30px}
+.intro p{margin:0;max-width:85ch;color:var(--ink-2)}
+
+/* cartes */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:14px;align-items:start}
+.ccard{padding:16px 18px;display:grid;gap:10px;min-width:0}
+.ccard header{display:flex;align-items:center;gap:10px}
+.ccard header b{display:block;font-size:16px}
+.ccard header span{display:block;font-size:13px;color:var(--muted)}
+.ccard ul,.list{margin:0;padding-left:18px;display:grid;gap:6px;font-size:15px}
+.ccard li::marker,.list li::marker{color:var(--muted)}
+.empty{color:var(--muted);font-style:italic;font-size:14px}
+.open{justify-self:start;background:none;border:0;padding:0;color:var(--accent);font-weight:600;font-size:13.5px;cursor:pointer}
+
+/* âges */
+.ages{padding:18px 20px;display:grid;gap:10px}
+.ages svg{width:100%;min-width:560px;height:auto;display:block}
+.ages .scroll{overflow-x:auto}
+.ages .others{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink-2)}
+.ages .others b{color:var(--ink)}
+
+/* profils */
+.profiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,160px),1fr));gap:8px}
+.prof{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;display:grid;gap:2px}
+.prof b{font-size:15px}
+.prof span{font-size:12.5px;color:var(--muted);line-height:1.35}
+.prof[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1.5px var(--accent);background:var(--accent-soft)}
+.gc{display:grid;gap:8px}
+.gc div{border-radius:10px;padding:10px 12px;font-size:14.5px;display:grid;gap:3px}
+.gc .g{background:var(--gain-soft)} .gc .g .label{color:var(--gain)}
+.gc .c{background:var(--cost-soft)} .gc .c .label{color:var(--cost)}
+
+/* fiche */
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick .face[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.fiche{display:grid;gap:22px}
+.fhead{padding:22px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:center}
+.fhead h2{font-size:clamp(34px,5vw,54px)}
+.fhead .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--ink-2);margin-top:6px}
+.fhead .status{grid-column:1/-1;font-size:14.5px;color:var(--ink-2);border-top:1px solid var(--line);padding-top:12px;margin:0}
+@media (max-width:520px){.fhead{grid-template-columns:minmax(0,1fr)}.av.lg{width:52px;height:52px;font-size:17px}}
+.sect-title{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sect-title h3{font-family:var(--f-display);font-weight:400;font-size:32px}
+.cgrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+.cgrid>*{min-width:0}
+.span6{grid-column:span 6}.span4{grid-column:span 4}.span8{grid-column:span 8}.span12{grid-column:span 12}
+@media (max-width:900px){.span6,.span4,.span8{grid-column:span 12}}
+.blk{padding:16px 18px;display:grid;gap:10px;align-content:start}
+.blk h4{margin:0;font-size:15px;font-weight:700}
+.wl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.wl{grid-template-columns:1fr}}
+.wl > div{border-radius:10px;padding:12px 14px;display:grid;gap:6px;align-content:start}
+.wl .w{background:var(--gain-soft)} .wl .w h4{color:var(--gain)}
+.wl .l{background:var(--cost-soft)} .wl .l h4{color:var(--cost)}
+.dir{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;border-radius:999px;padding:4px 10px;justify-self:start}
+.dir.depense{background:var(--cost-soft);color:var(--cost)}
+.dir.economies{background:var(--gain-soft);color:var(--gain)}
+.dir.mixte{background:var(--q-soft);color:var(--q)}
+.dir::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.feas div,.rrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+.feas div:last-child,.rrow:last-child{border-bottom:0}
+.badge{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;border-radius:6px;padding:3px 8px;white-space:nowrap;font-weight:500}
+.b-decret{background:var(--gain-soft);color:var(--gain)}
+.b-loi{background:var(--accent-soft);color:var(--accent)}
+.b-constit{background:var(--q-soft);color:var(--q)}
+.b-ue{background:var(--cost-soft);color:var(--cost)}
+.b-exec{background:var(--bg);color:var(--ink-2);border:1px solid var(--line)}
+.debate{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.debate{grid-template-columns:1fr}}
+.debate > div{display:grid;gap:6px;align-content:start}
+.debate h4{font-size:14px}
+.debate .pro h4{color:var(--gain)} .debate .con h4{color:var(--cost)}
+.qbox{background:var(--q-soft);border-radius:10px;padding:12px 14px;display:grid;gap:6px}
+.qbox h4{color:var(--q)}
+.prog{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px}
+.prog .blk h4{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.dayafter{padding:18px 20px;display:grid;gap:12px;background:var(--ink);color:var(--bg);border-radius:14px}
+.dayafter h3{font-family:var(--f-display);font-weight:400;font-size:28px}
+.dayafter .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
+.dayafter p{margin:0;font-size:14.5px;opacity:.85}
+.dayafter b{display:block;margin-bottom:2px}
+
+/* contexte */
+.cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:14px;align-items:start}
+.panel{padding:18px 20px;display:grid;gap:12px;min-width:0}
+.panel h3{font-family:var(--f-display);font-weight:400;font-size:28px}
+.bars{display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:110px minmax(0,1fr) 46px;gap:10px;align-items:center;font-size:14.5px}
+.bar .track{height:14px;background:var(--bg);border-radius:4px;overflow:hidden}
+.bar .fill{height:100%;border-radius:4px}
+.bar .v{text-align:right}
+.duels{width:100%;border-collapse:collapse;font-size:14.5px}
+.duels td{padding:8px 0;border-bottom:1px solid var(--line)}
+.duels tr:last-child td{border-bottom:0}
+.duels td:last-child{text-align:right;vertical-align:top}
+.split{display:flex;height:8px;border-radius:4px;overflow:hidden;margin-top:5px;background:var(--bg)}
+ol.agenda{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+ol.agenda li{display:grid;grid-template-columns:140px minmax(0,1fr);gap:12px;font-size:14.5px}
+ol.agenda .mono{color:var(--accent);font-size:13px}
+.others-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:8px}
+.oth{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.oth b{display:block;font-size:14.5px}
+.oth span{font-size:13px;color:var(--muted)}
+.log{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.log li{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;font-size:14.5px}
+.sources{columns:2 320px;font-size:14px;padding-left:18px;margin:0}
+.sources li{break-inside:avoid;margin-bottom:7px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:13.5px;color:var(--ink-2);align-items:center}
+footer{border-top:1px solid var(--line);margin-top:24px;padding-top:16px;color:var(--muted);font-size:13px;max-width:90ch}
+@media (max-width:520px){.bar{grid-template-columns:86px minmax(0,1fr) 40px}ol.agenda li,.log li{grid-template-columns:minmax(0,1fr);gap:2px}.kpi .v{font-size:38px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="label">Présidentielle française · guide des programmes</div>
+      <h1 style="margin-top:10px">Qui propose quoi pour <em>2027</em>&nbsp;?</h1>
+      <p class="lede">L'état réel du pays, les propositions des dix principaux candidats déclarés, et ce qu'elles changeraient concrètement : pour ton budget, pour les comptes publics, pour la place de la France en Europe. Mis à jour au fil de la campagne.</p>
+    </div>
+    <div class="ballot card">
+      <div class="label">Calendrier du scrutin</div>
+      <div class="rounds">
+        <div class="round"><b>18 avril</b><span>1er tour · 2027</span></div>
+        <div class="round"><b>2 mai</b><span>2nd tour · 2027</span></div>
+      </div>
+      <div class="cd"><span class="label">Avant le 1er tour</span><b id="countdown">J−167</b></div>
+      <div class="note" id="updatedLine">Dernière mise à jour : 2 novembre 2026</div>
+    </div>
+  </header>
+  <div class="faces" id="faces" aria-label="Accès direct aux fiches"></div>
+
+  <nav class="tabs" aria-label="Sections">
+    <div class="tabs-in">
+      <a href="#situation">La situation actuelle</a>
+      <a href="#moi">Ce qui change pour moi</a>
+      <a href="#themes">Par thème</a>
+      <a href="#candidats">Fiches candidats</a>
+      <a href="#contexte">Sondages</a>
+      <a href="#methode">Méthode et sources</a>
+    </div>
+  </nav>
+
+  <!-- ===== SITUATION ===== -->
+  <section class="view" id="v-situation" hidden>
+    <div class="vhead">
+      <div class="label">État des lieux · automne 2026</div>
+      <h2 class="serif">La situation actuelle</h2>
+      <p>Le prochain président héritera de ces chiffres. Ils ne disent pas pour qui voter ; ils fixent la marge de manœuvre de tous. Une promesse qui ne tient pas compte de ce cadre devra être financée autrement, reportée ou abandonnée.</p>
+    </div>
+    <div class="kpis">
+      <div class="card kpi alert"><span class="label">Dette publique</span><span class="v">119<small> % du PIB</small></span><span class="t">Près de 3 600 Md€</span><span class="s">Fin du 2e trimestre 2026. Le gouvernement prévoit 121,7 % en 2027.</span></div>
+      <div class="card kpi alert"><span class="label">Déficit public</span><span class="v">5,4<small> %</small></span><span class="t">du PIB attendu en 2026</span><span class="s">Plafond européen : 3 %. Objectif du budget 2027 : 5 %.</span><div class="meter" aria-hidden="true"><i style="width:77%"></i><b style="left:43%"></b></div><span class="s">Le trait marque les 3 %.</span></div>
+      <div class="card kpi alert"><span class="label">Intérêts de la dette</span><span class="v">72,9<small> Md€</small></span><span class="t">de charge prévue en 2027</span><span class="s">Agence France Trésor. Plus que le budget de la plupart des ministères.</span></div>
+      <div class="card kpi"><span class="label">Taux d'emprunt à 10 ans</span><span class="v">≈4,9<small> %</small></span><span class="t">plus haut depuis 2002</span><span class="s">Début octobre 2026. L'Allemagne emprunte autour de 3,4 %.</span></div>
+      <div class="card kpi"><span class="label">Croissance</span><span class="v">0,4<small> %</small></span><span class="t">prévue pour 2026 (Insee)</span><span class="s">Contre 0,7 % prévus auparavant : moins de recettes fiscales.</span></div>
+      <div class="card kpi"><span class="label">Chômage</span><span class="v">8,1<small> %</small></span><span class="t">au 1er trimestre 2026</span><span class="s">Plus haut depuis cinq ans. L'Insee prévoit 8,6 % fin 2026.</span></div>
+      <div class="card kpi"><span class="label">Inflation</span><span class="v">2,4<small> %</small></span><span class="t">sur un an, en août 2026</span><span class="s">Attendue à 2,9 % en fin d'année.</span></div>
+      <div class="card kpi"><span class="label">Retraites</span><span class="v">14,1<small> % du PIB</small></span><span class="t">de dépenses en 2025</span><span class="s">Solde 2025 : −5,1 Md€. 2,5 personnes de 20 à 64 ans par personne de 65 ans et plus, contre 3,6 en 2009 et 1,6 attendu en 2070 (COR).</span></div>
+    </div>
+
+    <div class="explain">
+      <div class="card blk"><h4>Pourquoi les taux comptent</h4><p>La dette se renouvelle en permanence. Quand toute la dette aura été refinancée, chaque point de taux en plus coûtera environ 36 Md€ par an. Une politique jugée peu crédible par les prêteurs fait monter ces taux, donc aussi ceux des crédits immobiliers et des entreprises.</p></div>
+      <div class="card blk"><h4>Peu de croissance, peu de recettes</h4><p>Avec 0,4 % de croissance, les impôts rapportent moins que prévu et le chômage remonte. Les programmes qui comptent sur une forte croissance pour se financer partent d'un point bas.</p></div>
+      <div class="card blk"><h4>La démographie pèse sur les retraites</h4><p>De moins en moins d'actifs financent de plus en plus de retraités. Avancer l'âge de départ augmente le besoin de financement ; le reculer le réduit mais demande de travailler plus longtemps. Il n'existe pas d'option gratuite.</p></div>
+      <div class="card blk"><h4>Un pays sans majorité stable</h4><p>Depuis 2024, aucune force n'a la majorité à l'Assemblée et les budgets passent difficilement. L'automne 2026 a connu des mobilisations sociales et lycéennes. Un programme de rigueur se heurte lui aussi à cette réalité politique et sociale.</p></div>
+    </div>
+
+    <div class="card blk">
+      <div class="sect-title"><h3>Le test de réalisme</h3><span class="note">Même grille pour chaque candidat</span></div>
+      <p class="note">Quatre obstacles concrets à la mise en œuvre, évalués à partir des éléments de chaque fiche. Vert : obstacle faible. Violet : obstacle réel. Ambre : obstacle majeur. Un obstacle juridique ou européen n'est pas un jugement sur la mesure, seulement sur la difficulté de l'appliquer. Grille révisée après le chiffrage de l'Institut Montaigne attendu au 1er trimestre 2027.</p>
+      <div class="real-wrap"><table class="real"><thead><tr><th>Candidat</th><th>Financement précisé</th><th>Compatible avec l'UE</th><th>Révision de la Constitution</th><th>Effet probable sur le déficit</th></tr></thead><tbody id="realBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ===== MOI ===== -->
+  <section class="view" id="v-moi" hidden>
+    <div class="vhead">
+      <div class="label">Conséquences par profil</div>
+      <h2 class="serif">Ce qui change pour moi</h2>
+      <p>Choisis la situation qui te ressemble. Pour chaque candidat : ce que ses mesures t'apporteraient directement, et la contrepartie qui va avec. Les effets découlent des mesures telles qu'annoncées ; leur application dépend du vote des lois.</p>
+    </div>
+    <div class="profiles" id="profiles"></div>
+    <div class="grid" id="moiGrid"></div>
+    <p class="note">Repères : SMIC net mensuel d'environ 1 478 € (1 867 € brut depuis le 1er juin 2026) ; âge légal de 64 ans pour les personnes nées à partir de 1969.</p>
+  </section>
+
+  <!-- ===== THÈMES ===== -->
+  <section class="view" id="v-themes" hidden>
+    <div class="vhead">
+      <div class="label">Comparatif</div>
+      <h2 class="serif">Les propositions, thème par thème</h2>
+    </div>
+    <div class="filters">
+      <div class="chips" id="themeChips"></div>
+      <div class="chips" id="candFilter" aria-label="Candidats affichés"></div>
+    </div>
+    <div class="intro" id="themeIntro"></div>
+    <div id="agesBlock"></div>
+    <div class="grid" id="cmpGrid"></div>
+    <p class="note">« Non détaillé » veut dire qu'aucune proposition précise n'apparaît dans les sources consultées, pas que le candidat n'a aucune position.</p>
+  </section>
+
+  <!-- ===== FICHES ===== -->
+  <section class="view" id="v-candidats" hidden>
+    <div class="vhead">
+      <div class="label">Fiches</div>
+      <h2 class="serif">Chaque candidat, en profondeur</h2>
+    </div>
+    <div class="pick" id="pick"></div>
+    <article class="fiche" id="fiche"></article>
+    <div class="dayafter">
+      <div class="label" style="color:inherit;opacity:.7">Vaut pour tous les candidats</div>
+      <h3>Le jour d'après l'élection</h3>
+      <div class="cols">
+        <p><b>Il faut une majorité</b>L'Assemblée élue en juillet 2024 siège normalement jusqu'en 2029. Le président élu peut la dissoudre pour chercher une majorité. Sans elle, l'essentiel d'un programme ne passe pas.</p>
+        <p><b>Ce qui passe par décret</b>Le gouvernement peut agir sans vote sur le SMIC, la programmation de l'énergie, les limitations de vitesse ou certaines règles du chômage. Ce sont les promesses les plus rapides à tenir.</p>
+        <p><b>Changer la Constitution</b>Une révision (article 89) exige un texte voté dans les mêmes termes par l'Assemblée et le Sénat, dominé par la droite et le centre, puis un référendum ou 3/5 du Congrès.</p>
+        <p><b>Le droit européen</b>Une loi contraire aux traités ou à la Convention européenne des droits de l'homme peut être écartée par les juges et exposer la France à des sanctions.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SONDAGES ===== -->
+  <section class="view" id="v-contexte" hidden>
+    <div class="vhead">
+      <div class="label">Rapport de force</div>
+      <h2 class="serif">Sondages et échéances</h2>
+    </div>
+    <div class="cols2">
+      <div class="panel card">
+        <h3>Intentions de vote au 1er tour</h3>
+        <p class="note">Harris Interactive, 5–8 octobre 2026, 2 004 personnes, marge ±2,2 pts. Moyenne de 32 enquêtes au 22 octobre (France-Vote) : Le Pen 34,3 %, Mélenchon 16,6 %, Philippe 16,4 %.</p>
+        <div class="bars" id="bars"></div>
+        <p class="note">Une photographie à un instant donné, pas une prévision. Lisnard, Tondelier et les autres candidats sont testés à moins de 5 %.</p>
+      </div>
+      <div class="panel card">
+        <h3>Hypothèses de second tour</h3>
+        <p class="note">Même enquête. La barre montre le partage des voix.</p>
+        <table class="duels" id="duels"></table>
+      </div>
+      <div class="panel card">
+        <h3>Prochaines échéances</h3>
+        <ol class="agenda">
+          <li><span class="mono">10–13 déc. 2026</span><span>Vote des adhérents écologistes : maintien de la candidature Tondelier ou ralliement.</span></li>
+          <li><span class="mono">1er trim. 2027</span><span>Chiffrage indépendant des programmes par l'Institut Montaigne.</span></li>
+          <li><span class="mono">Début avril 2027</span><span>Au plus tard : décision de la Cour de cassation sur Marine Le Pen. Si l'inéligibilité était rétablie, Jordan Bardella serait candidat.</span></li>
+          <li><span class="mono">18 avril 2027</span><span>Premier tour.</span></li>
+          <li><span class="mono">2 mai 2027</span><span>Second tour.</span></li>
+        </ol>
+      </div>
+      <div class="panel card">
+        <h3>Autres candidatures</h3>
+        <p class="note">Déclarées ou pressenties. Fiches à ajouter selon les sondages et les parrainages.</p>
+        <div class="others-grid" id="others"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MÉTHODE ===== -->
+  <section class="view" id="v-methode" hidden>
+    <div class="vhead">
+      <div class="label">Transparence</div>
+      <h2 class="serif">Méthode et sources</h2>
+    </div>
+    <div class="cols2">
+      <div class="panel card">
+        <h3>Comment lire cette page</h3>
+        <p style="margin:0">Les propositions viennent des sites officiels des candidats et partis, via la compilation sourcée de Votons-2027, complétée par la presse (Euronews, LCP, Public Sénat, AFP). Les chiffres de la situation viennent de l'Insee, de l'Agence France Trésor et du Conseil d'orientation des retraites.</p>
+        <p style="margin:0">Les conséquences suivent la même grille pour tous : effets par profil, gagnants et payeurs désignés par les mesures, effet sur les comptes publics, place en Europe, voie juridique, débat, test de réalisme. Quelques écarts sont calculés directement (1 600 € contre 1 478 € de SMIC net, par exemple).</p>
+        <div class="legend"><span class="badge b-decret">Décret</span>le gouvernement seul <span class="badge b-loi">Loi</span>majorité au Parlement <span class="badge b-constit">Constitution</span>révision ou référendum <span class="badge b-ue">Accord UE</span>dépend des partenaires <span class="badge b-exec">Exécutif</span>traité ou décision diplomatique</div>
+        <p class="note">Les couleurs des candidats servent seulement à les repérer ; elles ne reprennent pas celles des partis. Ordre alphabétique partout sauf dans les sondages.</p>
+      </div>
+      <div class="panel card">
+        <h3>Journal des mises à jour</h3>
+        <ol class="log" id="log"></ol>
+      </div>
+    </div>
+    <div class="panel card">
+      <h3>Sources</h3>
+      <ul class="sources" id="sources"></ul>
+    </div>
+  </section>
+
+  <footer>Page d'information sans affiliation partisane. Pour décider, lis les programmes complets sur les sites des candidats, liés dans chaque fiche.</footer>
+</div>
+
+<script>
+const UPDATED = "2026-11-02";
+const ELECTION = "2027-04-18";
+
+const THEMES = [
+ {id:"retraites", label:"Retraites", intro:"L'âge légal est de 64 ans pour les personnes nées à partir de 1969. Le système a perdu 5,1 Md€ en 2025 et le COR prévoit un déficit croissant. Les propositions vont de 60 ans à la suppression de l'âge légal."},
+ {id:"travail", label:"Travail et pouvoir d'achat", intro:"Salaire minimum, temps de travail, heures supplémentaires, chômage et prix de l'énergie : ce qui touche directement la fiche de paie et les dépenses du foyer."},
+ {id:"fiscalite", label:"Impôts et famille", intro:"Qui paie plus, qui paie moins : impôt sur le revenu, fortune, entreprises, aides aux familles."},
+ {id:"budget", label:"Dette et dépense publique", intro:"Déficit attendu à 5,4 % du PIB en 2026 pour un plafond européen de 3 %, et 72,9 Md€ d'intérêts prévus en 2027."},
+ {id:"immigration", label:"Immigration", intro:"Séjour, nationalité, accès aux aides sociales, droit d'asile, expulsions."},
+ {id:"securite", label:"Sécurité et justice", intro:"Police, peines, prisons, narcotrafic, organisation de la justice."},
+ {id:"europe", label:"Europe et monde", intro:"Union européenne, OTAN, budget militaire, Ukraine, commerce avec la Chine."},
+ {id:"energie", label:"Énergie et climat", intro:"Nucléaire, éolien, solaire, objectifs climatiques, prix de l'électricité."},
+ {id:"education", label:"École et jeunesse", intro:"Taille des classes, salaires des enseignants, Parcoursup, écrans, orientation."},
+ {id:"sante", label:"Santé et social", intro:"Hôpital, déserts médicaux, remboursements, fin de vie, handicap."},
+ {id:"institutions", label:"Institutions", intro:"Mode de scrutin, référendum, 49.3, nombre de parlementaires, rôle des juges."}
+];
+
+const PROFILES = [
+ {id:"smic", label:"Salarié au SMIC", d:"Bas salaire, temps plein"},
+ {id:"cadre", label:"Salarié cadre", d:"Revenu moyen ou élevé"},
+ {id:"retraite", label:"Retraité", d:"Déjà à la retraite"},
+ {id:"indep", label:"Indépendant", d:"Micro-entrepreneur, artisan, freelance"},
+ {id:"jeune", label:"Moins de 25 ans", d:"Étudiant ou jeune actif"},
+ {id:"parent", label:"Parent", d:"Enfants à charge"},
+ {id:"pme", label:"Dirigeant de TPE-PME", d:"Employeur"}
+];
+
+const FEAS = {decret:"Décret", loi:"Loi", constit:"Constitution", ue:"Accord UE", exec:"Exécutif"};
+const REAL = {
+ fin:{partiel:["Partiellement","mid"], non:["Non chiffré","high"]},
+ ue:{ok:["Compatible","low"], part:["Dépend des partenaires","mid"], tension:["Tensions fortes","high"], rupture:["Rupture","high"]},
+ cons:{non:["Peu ou pas","low"], some:["Pour certaines mesures","mid"], core:["Pour des mesures centrales","high"]},
+ def:{down:["Le réduit","low"], unc:["Incertain","mid"], up:["Le creuse probablement","high"]}
+};
+
+const C = [
+ {id:"attal", nom:"Gabriel Attal", ini:"GA", col:"#3B6FC4", parti:"Renaissance", famille:"Centre", sondage:"5 %",
+  statut:"Candidat déclaré depuis le 22 mai 2026. Ancien Premier ministre, secrétaire général de Renaissance.",
+  src:{label:"attalpresident.fr", url:"https://attalpresident.fr/programme"},
+  real:{fin:"partiel", ue:"part", cons:"some", def:"down"},
+  t:{
+   retraites:["Supprimer l'âge légal à terme : pension selon la durée cotisée, avec une vraie décote si l'on part tôt et une surcote si l'on part tard","Système universel, mêmes règles pour tous","Introduire une part de capitalisation"],
+   travail:["Supprimer le plafond légal d'heures supplémentaires (220 h/an sans accord)","Réforme de l'assurance chômage incitant au retour à l'emploi (+100 000 emplois selon lui)","Réécrire le Code du travail en une « Constitution du travail », le reste négocié par branche ou entreprise","Livret d'épargne type livret A pour financer des places en crèche"],
+   fiscalite:[],
+   budget:["« Frein d'urgence » sur les dépenses sociales avec une année blanche (pas de revalorisation pendant un an)"],
+   immigration:["« Accueillir moins pour accueillir mieux » : priorité au travail, regroupement familial réduit","Quotas limitatifs votés par le Parlement, par secteur et par origine géographique","Système à points sur le modèle canadien","Réformer Schengen pour permettre le refoulement aux frontières"],
+   securite:["Construire plus de places de prison, implantées par l'État en « opérations d'intérêt national »"],
+   europe:["« États-Unis d'Europe » créés par un référendum européen, avec un président élu","Un seul marché des capitaux et un produit d'épargne européen","Taxes ciblées sur les produits chinois vendus à perte","Réarmement, soutien à l'Ukraine, dissuasion nucléaire « avancée »"],
+   energie:["Fossiles de près de 60 % à 40 % de la consommation à court terme, sous 30 % en 2035, neutralité carbone en 2050","Leasing social et bonus étendus aux voitures électriques d'occasion","Rénovation thermique massive"],
+   education:["Rétablir les mesures du « Choc des savoirs »","Interdire les réseaux sociaux aux moins de 15 ans","Moins de 20 élèves par classe","Mieux payer professeurs et AESH grâce à la baisse démographique","Démassifier le supérieur, valoriser les métiers manuels et techniques"],
+   sante:["Un assistant médical d'IA pour chaque Français"],
+   institutions:["350 députés et 200 sénateurs","Un référendum chaque année sur plusieurs questions","Délai de 2 mois pour que l'administration réponde, silence vaut accord","Recours administratifs limités à 18 mois","« Spoil system » à la tête des grandes administrations"]
+  },
+  profils:{
+   smic:["Heures supplémentaires sans plafond légal : possibilité de gagner plus en travaillant plus.","Prestations sociales gelées un an (année blanche) et règles du chômage durcies."],
+   cadre:["Départ libre selon la durée cotisée, avec surcote si tu prolonges ; une part de capitalisation.","Aucune baisse d'impôt sur le revenu annoncée."],
+   retraite:["Aucune baisse de pension annoncée.","Si l'année blanche s'applique aux pensions, comme le terme le laisse entendre, perte de pouvoir d'achat égale à l'inflation d'une année (2 à 3 % au rythme actuel)."],
+   indep:["Réponse de l'administration garantie en 2 mois, silence vaut accord.","Peu de mesures propres aux indépendants ; retraite alignée sur un système universel."],
+   jeune:["Filières techniques valorisées, études plus courtes.","Supérieur « démassifié » : accès plus sélectif aux études longues."],
+   parent:["Financement de nouvelles places en crèche ; classes visées sous 20 élèves.","Allocations familiales concernées par l'année blanche."],
+   pme:["Code du travail renvoyé à la négociation d'entreprise, heures sup déplafonnées, délais administratifs garantis.","Taxes sur certains produits chinois : intrants plus chers pour ceux qui en importent."]
+  },
+  gagnants:["Salariés prêts à faire plus d'heures","Entreprises et porteurs de projets","Élèves (petites classes, pas de réseaux sociaux avant 15 ans)"],
+  payeurs:["Allocataires et retraités (année blanche)","Chômeurs (règles durcies)","Candidats au regroupement familial"],
+  fin:{sens:"economies", txt:"Économies surtout sur la dépense sociale (année blanche, chômage). Pas de baisse d'impôts massive annoncée. Aucun chiffrage global publié à ce jour."},
+  eur:"Plus d'intégration : États-Unis d'Europe, marché unique des capitaux, investissements communs sans attendre l'unanimité des 27. Protection commerciale ciblée contre la Chine.",
+  feas:[["Retraite à la durée cotisée","loi"],["Quotas par origine géographique","constit"],["Réduire le nombre de parlementaires","loi"],["Référendum annuel à choix multiples","constit"],["États-Unis d'Europe","ue"],["Réseaux sociaux interdits avant 15 ans","ue"]],
+  jours:"Rétablir le « Choc des savoirs » parmi ses premières décisions.",
+  pro:["La retraite à la durée cotisée laisse chacun choisir son âge de départ","Une immigration pilotée par les besoins de l'économie","Simplification favorable aux entreprises et aux projets"],
+  con:["L'année blanche réduit le pouvoir d'achat des retraités et allocataires","Héritier du bilan Macron, que ses opposants jugent responsable de la dérive des comptes","Les États-Unis d'Europe supposent l'accord d'autres pays, très incertain"],
+  q:["Les quotas par origine posent un problème d'égalité devant la loi","Le niveau de la décote et de la surcote, qui fixe les pensions réelles, n'est pas chiffré"]
+ },
+ {id:"glucksmann", nom:"Raphaël Glucksmann", ini:"RG", col:"#C0567A", parti:"Place publique / PS", famille:"Gauche sociale-démocrate", sondage:"10 %",
+  statut:"Désigné le 11 octobre 2026 par la primaire PS–Place publique « Choisir 2027 », avec 66,17 % des voix dès le premier tour.",
+  src:{label:"place-publique.eu", url:"https://place-publique.eu/pages/6mRSwq5tuSrSi68Cw1IADX/l-acte-i"},
+  real:{fin:"non", ue:"part", cons:"some", def:"up"},
+  t:{
+   retraites:["Abroger la réforme de 2023","Intégrer l'espérance de vie en bonne santé : départ plus tôt pour les métiers pénibles et carrières hachées, plus tard pour les cadres"],
+   travail:["SMIC à 1 600 € net dans les deux ans","Généraliser « Territoires zéro chômeur » et créer un CDI d'insertion","Abroger la réforme de l'assurance chômage"],
+   fiscalite:["Mettre fin à la « sécession des ultrariches » : rééquilibrer la taxation du travail, du capital, de la retraite et de l'héritage (modalités non précisées)","Fonds national pour le foncier et le logement abordable"],
+   budget:["Pas de trajectoire chiffrée publiée","Défense financée par un emprunt européen plutôt que national"],
+   immigration:["Convention citoyenne tirée au sort sur l'immigration, débouchant sur des lois","Voies légales de travail liées à des accords de réadmission","Répartition européenne des demandeurs d'asile, fin de Dublin","Abroger la loi immigration de 2024 ; carte pluriannuelle comme titre de référence","Force européenne de sauvetage en mer"],
+   securite:["Police de proximité centrée sur la prévention","Plus d'enquêteurs contre le narcotrafic, office national anti-blanchiment","Juger en France les djihadistes rapatriés","Doubler les Maisons du droit et de la justice","Plan d'1 Md€ contre les violences sexistes et sexuelles"],
+   europe:["Fonds européen de défense de 500 Md€ par emprunt commun","Proposer d'étendre la dissuasion nucléaire aux partenaires, la décision restant française","Aide militaire accrue à l'Ukraine","Traité de refondation de l'UE : majorité qualifiée, initiative législative au Parlement européen","Reconnaître l'État palestinien ; interdire le gaz russe","Service civique obligatoire de 10 mois"],
+   energie:["Loi Climat : −90 % d'émissions en 2040, neutralité en 2050","Loi contre la fast-fashion, score carbone, fin du plastique jetable en 2030","Relancer MaPrimeRénov'","Plan Rail national"],
+   education:["Moins d'élèves par enseignant en primaire, tutorat sur le temps scolaire","Revaloriser tous les enseignants sur 5 ans","Privé sous contrat intégré à la carte scolaire","Module « Médias et influence » au lycée","Un séjour collectif garanti pour chaque enfant"],
+   sante:["Sortir de la tarification à l'acte à l'hôpital","Santé mentale des jeunes priorité nationale","Sécurité sociale unique fusionnant les régimes","Plan de prévention pluriannuel"],
+   institutions:["Premier ministre investi par un vote de confiance, censure « constructive », fin du 49.3","Proportionnelle par circonscriptions régionales","Supprimer l'article 16, réformer le Conseil constitutionnel","Vote à 16 ans et vote des étrangers non européens aux élections locales"]
+  },
+  profils:{
+   smic:["SMIC à 1 600 € net en deux ans, soit environ +120 €/mois.","Coût du travail plus élevé au SMIC, avec un chômage déjà à 8,1 % : embauches freinées selon les économistes de l'offre."],
+   cadre:["Réformes démocratiques ; pas de hausse d'impôt sur le revenu annoncée pour les classes moyennes.","Départ à la retraite plus tard que les autres catégories."],
+   retraite:["Abrogation des 64 ans pour les futurs retraités.","Taxation de la retraite « rééquilibrée » : contours non précisés."],
+   indep:["Une Sécurité sociale unique, plus simple.","Fusion des régimes : règles et cotisations des indépendants pourraient changer."],
+   jeune:["Vote à 16 ans ; santé mentale des jeunes prioritaire.","Service civique obligatoire de 10 mois."],
+   parent:["Moins d'élèves par enseignant, tutorat gratuit sur le temps scolaire.","Privé sous contrat soumis à la carte scolaire : moins de liberté de choix."],
+   pme:["Commande publique orientée vers le « Fabriqué en France ».","SMIC plus élevé ; fiscalité du capital et de l'héritage revue."]
+  },
+  gagnants:["Salariés au SMIC","Métiers pénibles, carrières hachées","Chômeurs (abrogation de la réforme)"],
+  payeurs:["Très hauts patrimoines et héritages","Cadres (départ plus tardif)","Familles du privé sous contrat"],
+  fin:{sens:"depense", txt:"Dépenses nouvelles : SMIC (y compris pour l'État employeur), abrogation des réformes retraites et chômage, plans santé, école, violences. Recettes attendues sur les très hauts patrimoines, non chiffrées. Défense par emprunt européen."},
+  eur:"Intégration la plus poussée : emprunt commun de 500 Md€, dissuasion française étendue, fin de l'unanimité. Soutien militaire renforcé à l'Ukraine, reconnaissance de la Palestine.",
+  feas:[["SMIC à 1 600 € net","decret"],["Abroger les 64 ans","loi"],["Proportionnelle","loi"],["Censure constructive, fin du 49.3 et de l'article 16","constit"],["Vote des étrangers non européens","constit"],["Fonds de défense de 500 Md€","ue"]],
+  jours:"Proportionnelle « immédiatement » ; SMIC à 1 600 € net dans les deux ans.",
+  pro:["Une gauche pro-européenne qui assume défense et sécurité, en rupture avec LFI","Retraites modulées selon la santé : plus juste pour les métiers pénibles","Sortie du blocage parlementaire par la réforme institutionnelle"],
+  con:["Coût élevé sans chiffrage ni financement précis, alors que le déficit dépasse 5 %","Fiscalité des « ultrariches » floue","Vote des étrangers et à 16 ans contestés ; convention citoyenne vue comme un moyen de repousser la décision"],
+  q:["Comment définir qui part plus tard selon l'espérance de vie en bonne santé ?","Dissuasion partagée et emprunt commun dépendent des autres pays"]
+ },
+ {id:"lepen", nom:"Marine Le Pen", ini:"MLP", col:"#2E8F86", parti:"Rassemblement national", famille:"Extrême droite", sondage:"35 %",
+  statut:"Condamnée en appel le 7 juillet 2026 mais éligible : inéligibilité ramenée à 15 mois, déjà purgée. Pourvoi en cassation en cours, décision au plus tard début avril 2027. Si l'inéligibilité était rétablie, Jordan Bardella serait le candidat du RN.",
+  src:{label:"rassemblementnational.fr", url:"https://rassemblementnational.fr/22-mesures"},
+  real:{fin:"partiel", ue:"tension", cons:"core", def:"up"},
+  t:{
+   retraites:["Départ à 60 ans pour ceux qui ont commencé avant 20 ans et cotisé 40 annuités","Minimum vieillesse à 1 000 €/mois, hausse des petites retraites","Retour vers 60-62 ans : 26,5 Md€ selon l'Institut Montaigne, 9,6 Md€ selon le RN","Désaccord public avec Jordan Bardella, plus prudent sur le coût"],
+   travail:["TVA de 20 % à 5,5 % sur carburants, fioul, gaz et électricité","Renationaliser les autoroutes, péages −15 %","Supprimer la redevance en privatisant l'audiovisuel public"],
+   fiscalite:["Exonérer d'impôt sur le revenu les actifs de moins de 30 ans"],
+   budget:["Baisser la contribution française au budget de l'UE","Économies attendues sur l'immigration et la fraude"],
+   immigration:["Demandes d'asile traitées uniquement à l'étranger","Aides sociales réservées aux Français ; 5 ans de travail pour les prestations de solidarité","Supprimer le droit du sol ; naturalisation au mérite","Expulsion systématique des clandestins et délinquants étrangers","Supprimer le visa pour soins"],
+   securite:["Peines planchers","Fin des réductions et aménagements de peine, surtout pour les violences","Présomption de légitime défense pour les forces de l'ordre","85 000 places de prison"],
+   europe:["Budget de la défense à 55 Md€","Contribution à l'UE réduite, abandon du marché carbone ETS2"],
+   energie:["Arrêter l'éolien et démanteler progressivement les parcs","Relancer nucléaire, hydroélectricité, hydrogène","Sortir du marché européen de l'électricité"],
+   education:["Recentrer sur français, maths, histoire","Uniforme en primaire et au collège","Revaloriser les enseignants","100 000 logements étudiants ; frais plus élevés pour les étudiants étrangers"],
+   sante:["Plan d'urgence de 20 Md€","Arrêter les fermetures de lits et de maternités","Supprimer les ARS, 10 % maximum de postes administratifs à l'hôpital","Incitations fortes contre les déserts médicaux","AAH déconjugalisée et revalorisée"],
+   institutions:["Référendum d'initiative citoyenne","Proportionnelle","Ministère d'État de la Mer et de l'Outre-mer"]
+  },
+  profils:{
+   smic:["TVA de 20 % à 5,5 % sur carburant, électricité et gaz ; péages −15 %.","Pas de hausse du SMIC annoncée."],
+   cadre:["Énergie moins chère ; plus d'impôt sur le revenu avant 30 ans.","Financement contesté : un dérapage de la dette ferait monter les taux des crédits immobiliers."],
+   retraite:["Minimum vieillesse à 1 000 €/mois, petites retraites revalorisées.","Pas de revalorisation chiffrée pour les pensions moyennes."],
+   indep:["Carburant et énergie moins chers ; exonération d'IR jusqu'à 30 ans.","Peu de mesures propres aux indépendants."],
+   jeune:["Pas d'impôt sur le revenu jusqu'à 30 ans ; 100 000 logements étudiants.","Uniforme au collège ; frais plus élevés pour les étudiants étrangers."],
+   parent:["Uniforme et recentrage sur les fondamentaux.","Pour les familles étrangères en situation régulière : perte d'accès à certaines prestations."],
+   pme:["Énergie et carburant moins chers.","Sortie du marché européen de l'électricité et conflit avec Bruxelles : incertitude pour les entreprises qui exportent."]
+  },
+  gagnants:["Ménages consommateurs d'énergie, automobilistes","Actifs de moins de 30 ans","Petites retraites, carrières longues"],
+  payeurs:["Étrangers en situation régulière (aides réservées aux Français)","Contribuables futurs si le financement ne suit pas","Filière éolienne"],
+  fin:{sens:"depense", txt:"Retraites : 26,5 Md€/an selon l'Institut Montaigne (9,6 Md€ selon le RN). S'ajoutent TVA énergie, IR des moins de 30 ans, plan santé de 20 Md€, défense à 55 Md€. Les économies sur l'immigration, la fraude et l'UE sont contestées par les économistes."},
+  eur:"Rapport de force avec Bruxelles : sortie du marché de l'électricité, contribution réduite, abandon de l'ETS2. Préférence nationale et asile à l'étranger heurtent le droit européen et exposeraient la France à des procédures.",
+  feas:[["TVA à 5,5 % sur l'énergie","loi"],["Préférence nationale pour les aides","constit"],["Asile demandé uniquement à l'étranger","constit"],["Fin du droit du sol","loi"],["Sortie du marché européen de l'électricité","ue"],["Référendum d'initiative citoyenne","constit"]],
+  jours:"Pas de calendrier détaillé publié. Les mesures constitutionnelles passeraient par un référendum, voie que le RN a déjà évoquée.",
+  pro:["Baisse immédiate et visible de la facture d'énergie et des péages","Réponse ferme sur l'immigration et l'insécurité, priorités de ses électeurs","Protection des petites retraites et carrières longues"],
+  con:["Préférence nationale et fin du droit du sol contraires à la Constitution et au droit européen selon de nombreux juristes","Plusieurs dizaines de milliards sans financement crédible selon les économistes, avec des taux déjà proches de 5 %","Condamnation pour détournement de fonds publics ; désaccords internes avec Bardella"],
+  q:["Quelle ligne l'emportera sur les retraites, la sienne ou celle de Bardella ?","Un référendum constitutionnel par l'article 11 serait contesté juridiquement"]
+ },
+ {id:"lisnard", nom:"David Lisnard", ini:"DL", col:"#B7791F", parti:"Nouvelle Énergie", famille:"Droite libérale", sondage:"moins de 5 %",
+  statut:"Maire de Cannes, président de l'Association des maires de France. A quitté LR et s'est déclaré le 31 mars 2026. Plaide pour une primaire ouverte à droite. Fiche établie sur 38 de ses 117 mesures.",
+  src:{label:"unenouvelleenergie.fr", url:"https://www.unenouvelleenergie.fr/notre-programme/"},
+  real:{fin:"partiel", ue:"ok", cons:"some", def:"unc"},
+  t:{
+   retraites:["Pension minimale par répartition dès 65 ans, complétée par un minimum vieillesse de 1 000 €/mois","Faire évoluer le reste du système vers la capitalisation"],
+   travail:["Contrat de travail unique remplaçant CDI et CDD, indemnités croissantes avec l'ancienneté","Charges patronales négatives pour embaucher un allocataire du RSA depuis plus de deux ans"],
+   fiscalite:["Impôts de production divisés par deux (C3S, puis CVAE si nécessaire)","Fiscalité environnementale à prélèvement total constant"],
+   budget:["Contraintes administratives divisées par deux","L'essentiel des compétences non régaliennes transféré aux collectivités","AME remplacée par une aide d'urgence (700 M€ d'économies selon lui)"],
+   immigration:["Titres de séjour divisés par huit","Fin du droit du sol automatique","Revenir sur l'accord franco-algérien de 1968","Plus de centres de rétention, rétention jusqu'à 24 mois"],
+   securite:["Fin des réductions de peine automatiques, peines planchers pour les récidivistes","Majorité pénale à 16 ans, réforme de l'excuse de minorité","Police municipale armée dans les communes volontaires","Cellules anti-stupéfiants et confiscations renforcées"],
+   europe:["Traité de démocratisation de l'UE","Référendum si des règles supranationales bloquent la souveraineté","Fin des surtranspositions, clauses miroirs","PAC recentrée sur la souveraineté alimentaire ; consortium pharmaceutique européen"],
+   energie:["Réacteurs prolongés jusqu'à 60 ans, nouvelles technologies nucléaires","Filières de captage du CO2 et d'hydrogène"],
+   education:["Supprimer la carte scolaire","Certificat de fin de primaire pour entrer au collège","Latin, grec et philosophie dès le primaire","+20 % pour les enseignants en 5 ans, contre une réorganisation"],
+   sante:["Doubler les étudiants en médecine d'ici 2030 ; supprimer Parcoursup","Supprimer les ARS au profit des préfets","Liberté d'installation des médecins, conventionnement différencié"],
+   institutions:["Supprimer l'article 55 de la loi SRU (quota de logements sociaux)","Séparer les budgets de la justice et de l'administration pénitentiaire","Droit d'initiative réservé au Parlement sur un périmètre défini"]
+  },
+  profils:{
+   smic:["Les allocataires du RSA de longue durée deviennent très intéressants à embaucher.","Contrat unique : moins protecteur qu'un CDI au début, indemnités qui croissent avec l'ancienneté."],
+   cadre:["Une partie de la retraite en capitalisation, potentiellement plus rentable sur une longue carrière.","La répartition réduite à un minimum : ta pension dépendra en partie des marchés financiers."],
+   retraite:["Minimum vieillesse à 1 000 €/mois.","Le système doit payer les pensions actuelles tout en finançant la capitalisation des actifs : pression sur les comptes."],
+   indep:["Normes divisées par deux, décentralisation.","Retraite des indépendants appelée à basculer vers la capitalisation."],
+   jeune:["Places en médecine doublées, fin de Parcoursup.","Retraite de base réduite à un minimum pour ta génération ; majorité pénale à 16 ans."],
+   parent:["Libre choix de l'école (fin de la carte scolaire) ; latin, grec, philo dès le primaire.","Certificat de fin de primaire : un enfant peut ne pas passer au collège."],
+   pme:["Impôts de production divisés par deux, contrat unique, normes allégées.","Titres de séjour divisés par huit : recrutement plus difficile dans les métiers en tension."]
+  },
+  gagnants:["Entreprises (impôts de production, normes)","Collectivités (nouvelles compétences)","Familles qui veulent choisir leur école"],
+  payeurs:["Futurs retraités dépendant de la répartition","Salariés (contrat unique moins protecteur au départ)","Étrangers (titres, AME)"],
+  fin:{sens:"mixte", txt:"Baisse d'impôts de production financée par la simplification, la décentralisation et des économies ciblées (AME : 700 M€). La bascule vers la capitalisation crée un coût de transition : payer en même temps les pensions actuelles et l'épargne des actifs."},
+  eur:"Reste dans l'UE et l'OTAN mais veut renégocier : traité de démocratisation, référendum en cas de blocage de souveraineté, fin des surtranspositions, clauses miroirs.",
+  feas:[["Contrat de travail unique","loi"],["Bascule vers la capitalisation","loi"],["Fin du droit du sol automatique","loi"],["Rétention jusqu'à 24 mois (directive actuelle : 18 mois)","ue"],["Majorité pénale à 16 ans","constit"],["Supprimer le quota SRU","loi"]],
+  jours:"Calendrier non précisé dans les sources consultées.",
+  pro:["Programme libéral cohérent : moins d'impôts, moins de normes, plus de décentralisation","Expérience d'élu local et de président des maires de France","Fermeté migratoire et pénale chiffrée"],
+  con:["Capitalisation et pension minimale à 65 ans : moins de protection pour les retraités","Contrat unique et fin du quota SRU : précarisation et recul du logement social selon ses critiques","Titres ÷ 8 : pénurie de main-d'œuvre dans certains secteurs"],
+  q:["Comment financer la double charge de la transition vers la capitalisation ?","Maintiendra-t-il sa candidature sans primaire à droite ?"]
+ },
+ {id:"melenchon", nom:"Jean-Luc Mélenchon", ini:"JLM", col:"#7A5BC4", parti:"La France insoumise", famille:"Gauche radicale", sondage:"18 %",
+  statut:"Candidat pour la quatrième fois, confirmé fin mai 2026. Programme « L'Avenir en commun », version 2025.",
+  src:{label:"melenchon2027.fr", url:"https://melenchon2027.fr/programme2025/livre/"},
+  real:{fin:"partiel", ue:"rupture", cons:"core", def:"up"},
+  t:{
+   retraites:["Abroger la réforme de 2023, retraite à 60 ans à taux plein avec 40 annuités","Aucune pension sous le SMIC"],
+   travail:["SMIC à 1 600 € net immédiatement, salaires indexés sur l'inflation","35 heures effectives, heures sup majorées à 25 % puis 50 %","32 heures dans les métiers pénibles ou de nuit"],
+   fiscalite:["Impôt sur le revenu à 14 tranches au lieu de 5","Impôt plancher de 2 % sur le patrimoine des milliardaires (taxe Zucman)"],
+   budget:["Plan de 200 Md€ d'investissements écologiques et sociaux","200 000 logements publics par an pendant 5 ans","Ne plus appliquer les règles budgétaires européennes jugées incompatibles"],
+   immigration:["Droit du sol intégral, nationalité facilitée","Vote des étrangers aux élections locales","Régularisations (travailleurs, étudiants, parents) ; carte de 10 ans comme référence","Suspendre Dublin, renégocier le Touquet, abroger les dernières lois immigration"],
+   securite:["Interdire tasers, LBD et grenades de désencerclement","Abroger la loi de 2017 sur le refus d'obtempérer","Police de proximité ; dissoudre BAC et BRAV-M","Conscription citoyenne de 9 mois payée au SMIC","Régulation contraignante de la surpopulation carcérale"],
+   europe:["Quitter le commandement intégré de l'OTAN, puis l'OTAN","Veto aux accords de libre-échange (Mercosur…) et aux élargissements","Ukraine : cadre diplomatique pour cessez-le-feu et retrait russe","Reconnaître la Palestine"],
+   energie:["−65 % d'émissions en 2030","Sortir du nucléaire, abandonner les EPR","Renationaliser la SNCF","Isoler 700 000 logements par an"],
+   education:["500 000 places en crèche","Cantine, transport, fournitures gratuits","Moins de 19 élèves par classe","École obligatoire jusqu'à 18 ans","Démanteler Parcoursup"],
+   sante:["« 100 % Sécu » : soins remboursés à 100 %, mutuelles intégrées","Un service de santé à moins de 30 minutes de chacun","10 000 places en Ehpad publics par an","Droit de mourir dans la dignité dans la Constitution"],
+   institutions:["Assemblée constituante pour une VIe République","Proportionnelle","Supprimer le 49.3","RIC révocatoire et constitutionnel","Dons aux partis plafonnés à 200 €"]
+  },
+  profils:{
+   smic:["SMIC à 1 600 € net tout de suite (+120 €/mois environ, +8 %), 35 h effectives, heures sup mieux payées.","Hausse brutale du coût du travail : risque pour l'emploi dans les petites entreprises selon ses critiques."],
+   cadre:["Soins remboursés à 100 %, mutuelle intégrée à la Sécu.","Barème à 14 tranches : impôt plus élevé pour les hauts revenus."],
+   retraite:["Pension au moins égale au SMIC.","Soutenabilité du financement contestée par de nombreux économistes."],
+   indep:["100 % Sécu, services publics de proximité.","Retraite à 60 ans et 100 % Sécu financés par des cotisations et impôts supplémentaires."],
+   jeune:["Fin de Parcoursup, formation choisie sans sélection.","Conscription citoyenne de 9 mois, payée au SMIC."],
+   parent:["Cantine, transport et fournitures gratuits ; 500 000 places en crèche.","Classes de moins de 19 élèves : recrutement massif d'enseignants, long à réaliser."],
+   pme:["Commandes publiques dopées par 200 Md€ d'investissements.","SMIC +8 %, 35 h effectives, heures sup majorées : coût du travail en hausse."]
+  },
+  gagnants:["Salariés modestes et retraités","Locataires (200 000 logements publics par an)","Patients (100 % Sécu)"],
+  payeurs:["Hauts revenus et milliardaires","Entreprises (coût du travail)","Mutuelles et filière nucléaire"],
+  fin:{sens:"depense", txt:"Le programme le plus dépensier : plan de 200 Md€, 200 000 logements publics par an, retraite à 60 ans, 100 % Sécu, SMIC. Recettes : impôt à 14 tranches, taxe Zucman. Rupture assumée avec les règles budgétaires européennes, avec un risque sur des taux d'emprunt déjà proches de 5 %."},
+  eur:"Rupture : sortie du commandement intégré puis de l'OTAN, refus d'appliquer les règles européennes jugées contraires (budget, concurrence, travailleurs détachés), veto aux accords commerciaux.",
+  feas:[["SMIC à 1 600 € net","decret"],["Retraite à 60 ans, 35 h effectives","loi"],["Taxe Zucman","loi"],["VIe République par une Constituante","constit"],["Sortie de l'OTAN","exec"],["Ne plus appliquer certaines règles de l'UE","ue"]],
+  jours:"SMIC et 35 h « immédiatement » ; convocation d'une Assemblée constituante.",
+  pro:["Hausse directe des revenus des salariés et retraités modestes","Financement par la taxation des plus hauts revenus et patrimoines","Planification écologique et services publics renforcés"],
+  con:["Coût jugé infinançable par de nombreux économistes, risque sur les taux d'emprunt","Désobéissance européenne et sortie de l'OTAN : crise avec les partenaires","Sortie du nucléaire contestée pour les prix et l'approvisionnement ; ligne sur la police jugée laxiste par ses adversaires"],
+  q:["Le processus constituant est long et à l'issue incertaine","Les entreprises absorberaient-elles +8 % de SMIC d'un coup ?"]
+ },
+ {id:"philippe", nom:"Édouard Philippe", ini:"EP", col:"#4E8A3E", parti:"Horizons", famille:"Centre droit", sondage:"13 %",
+  statut:"Candidat déclaré depuis septembre 2024. Ancien Premier ministre, maire du Havre. Placé le 30 octobre 2026 sous le statut de témoin assisté dans une procédure judiciaire.",
+  src:{label:"edouardphilippe.fr", url:"https://www.edouardphilippe.fr/"},
+  real:{fin:"partiel", ue:"ok", cons:"some", def:"down"},
+  t:{
+   retraites:["Âge légal porté progressivement à 65 ans","Durée de cotisation à 45 annuités","Environ un tiers des salariés exemptés ; concertation avec les syndicats"],
+   travail:["Cotisations supprimées pour 2 h de travail en plus par semaine (≈ 1 000 €/an au SMIC selon lui)","Chômage : de 18 à 12 mois d'indemnisation maximum pour les moins de 50 ans"],
+   fiscalite:["50 Md€ de baisse des impôts de production contre 50 Md€ d'aides aux entreprises supprimées","Ni nouvel impôt ni nouvelle norme pendant le quinquennat","Allocation unique de 350 €/mois dès le 1er enfant, dégressive selon l'impôt","Réduction d'impôt d'environ 3 000 € pour les familles qui travaillent ; part fiscale dès le 2e enfant ; prêt à taux zéro à chaque naissance"],
+   budget:["Règle d'or dans la Constitution ; déficit à 2 % du PIB en fin de mandat","Un fonctionnaire remplacé sur trois départs en retraite (≈ 250 000 postes en 5 ans)","Moitié de l'effort sur les dépenses sociales","Une vingtaine d'ordonnances dès juillet 2027"],
+   immigration:["Diviser par deux l'immigration légale (sous 200 000 titres par an)","Dénoncer l'accord franco-algérien de 1968","Liste de pays sûrs votée chaque année","Quotas économiques ; immigration familiale restreinte","Expulsion immédiate des étrangers délinquants"],
+   securite:["Courtes peines dès la première infraction ; peines planchers pour les faits graves","« État d'urgence narco » jusqu'à la reconnaissance faciale ciblée","Supprimer le juge d'application des peines","Pouvoir de sanction pénale pour les maires","Réservistes de 45 000 à 250 000"],
+   europe:["Protection face à la Chine : transferts de technologie, joint-ventures","Union des marchés de capitaux, IA européenne souveraine","Soutien à l'Ukraine"],
+   energie:["Nucléaire, renouvelables et électrification","Prix du carbone aux frontières","Fonds d'adaptation de 2 Md€/an ; Fonds vert doublé","Climatisation des lieux accueillant des personnes fragiles"],
+   education:["Chefs d'établissement « patrons » : uniforme, discipline, choix des enseignants","Hausse massive des salaires des professeurs","Journées plus courtes, vacances d'été raccourcies","Soutien scolaire public universel avec IA"],
+   sante:["Stabiliser les dépenses de santé par la prévention et la technologie"],
+   institutions:["Instructions individuelles du garde des Sceaux aux procureurs","Responsabilité accrue des juges, réforme du CSM"]
+  },
+  profils:{
+   smic:["Environ +1 000 €/an en travaillant 2 h de plus par semaine, sans cotisations (son estimation).","Chômage limité à 12 mois avant 50 ans ; retraite à 65 ans."],
+   cadre:["Réduction d'impôt d'environ 3 000 € si tu as des enfants ; part fiscale dès le 2e.","45 annuités : départ tardif si tu as fait de longues études."],
+   retraite:["Aucune baisse de pension annoncée.","Moitié des économies sur le social : revalorisations futures incertaines."],
+   indep:["Ni nouvel impôt ni nouvelle norme pendant 5 ans.","65 ans et 45 annuités s'appliqueraient aussi si la réforme couvre tous les régimes."],
+   jeune:["Soutien scolaire public gratuit, droit à la reconversion face à l'IA.","Ta génération partira à 65 ans avec 45 annuités."],
+   parent:["Allocation de 350 €/mois dès le 1er enfant, prêt à taux zéro à chaque naissance.","Allocation dégressive : peu ou rien pour les foyers aisés."],
+   pme:["50 Md€ de baisse des impôts de production, stabilité fiscale, heures sup exonérées.","50 Md€ d'aides supprimées en contrepartie : certaines filières perdent leurs subventions."]
+  },
+  gagnants:["Familles avec enfants","Salariés qui font des heures supplémentaires","Entreprises (impôts de production)"],
+  payeurs:["Actifs (65 ans, 45 annuités)","Chômeurs de moins de 50 ans","Fonction publique (1 départ sur 3 remplacé)"],
+  fin:{sens:"economies", txt:"L'objectif le plus ambitieux : déficit à 2 % du PIB en fin de mandat, contre 5,4 % attendus en 2026. Leviers : retraite à 65 ans, 250 000 postes publics en moins, chômage, moitié de l'effort sur le social. Pacte entreprises neutre (50 Md€ contre 50 Md€). Coût des mesures familiales non publié."},
+  eur:"Continuité européenne, avec une protection plus dure face à la Chine (transferts de technologie, achats tech européens). Soutien à l'Ukraine.",
+  feas:[["Retraite à 65 ans, 45 annuités","loi"],["Règle d'or budgétaire","constit"],["Ordonnances de juillet 2027","loi"],["Indemnisation chômage à 12 mois","decret"],["Dénoncer l'accord de 1968 avec l'Algérie","exec"],["Reconnaissance faciale ciblée","ue"]],
+  jours:"Une vingtaine d'ordonnances en session extraordinaire en juillet 2027, en vigueur dès l'automne.",
+  pro:["Redressement des comptes jugé crédible, avec un objectif chiffré","Gain immédiat pour ceux qui travaillent plus, soutien fort aux familles","Fermeté migratoire et pénale sans rupture avec l'UE"],
+  con:["65 ans et 45 annuités : la réforme la plus dure, source probable de conflit social dans un pays déjà mobilisé","Moins de fonctionnaires et chômage raccourci : risque pour les services publics","Ordonnances dès l'été : débat parlementaire réduit"],
+  q:["Passer de 5,4 % à 2 % de déficit en cinq ans avec 0,4 % de croissance : est-ce tenable ?","Quels critères pour exempter un tiers des salariés ?"]
+ },
+ {id:"retailleau", nom:"Bruno Retailleau", ini:"BR", col:"#C25B3A", parti:"Les Républicains", famille:"Droite", sondage:"7 %",
+  statut:"Désigné par les adhérents LR à 73,8 % en avril 2026, candidature annoncée le 12 février 2026. Programme encore partiel (sécurité et santé à venir).",
+  src:{label:"republicains.fr", url:"https://republicains.fr/qrtravail/"},
+  real:{fin:"partiel", ue:"ok", cons:"some", def:"unc"},
+  t:{
+   retraites:["Âge minimal de départ à 63 ans, taux plein à 65 ans, ensuite lié à l'espérance de vie","Capitalisation pour les jeunes : 25 à 30 % de leur retraite au départ, rendement visé d'au moins 4 %"],
+   travail:["Durée annuelle de 1 607 à 1 623 heures (deux jours de plus, payés)","Supprimer dès l'élection les 50 règles les plus pénalisantes pour les entreprises","« RIA socle » de 300 €/mois pour les adultes sans activité ni revenu"],
+   fiscalite:["40 Md€ de baisse de la fiscalité des entreprises, stabilité garantie 5 ans","Revenu familial de 240 €/mois dès le 1er enfant, fusionnant 12 dispositifs"],
+   budget:["Baisse de la dépense publique","Règle « un pour un » : chaque euro de contrainte nouvelle compensé","Autorité indépendante avec droit de veto sur les normes ; pas de surtransposition"],
+   immigration:["Prestations familiales après 5 ans de résidence régulière et d'activité","Hébergement d'urgence réservé aux personnes en situation régulière"],
+   securite:[],
+   europe:["Clauses de réciprocité dans tous les accords commerciaux","Taxe carbone aux frontières étendue aux produits transformés","Coalition pro-nucléaire ; recours à la CJUE si la Commission excède ses compétences"],
+   energie:["8 EPR2 supplémentaires si les 6 premiers avancent bien","Abroger le volet électricité de la PPE3, plus de nouveaux appels d'offres solaire et éolien en mer","Supprimer le zéro artificialisation nette (ZAN)","Assouplir le DPE pour remettre 750 000 logements sur le marché"],
+   education:["Lycées professionnels et orientation confiés aux régions et entreprises","Aide de 6 000 € pour le pré-apprentissage","+30 % d'effectifs dans l'enseignement agricole d'ici 2030"],
+   sante:[],
+   institutions:["Retirer le principe de précaution de la Constitution, par référendum"]
+  },
+  profils:{
+   smic:["Deux jours de travail payés en plus par an.","Âge minimal relevé à 63 ans, taux plein à 65."],
+   cadre:["Capitalisation pour les jeunes actifs, rendement visé d'au moins 4 %.","Taux plein à 65 ans puis indexé sur l'espérance de vie."],
+   retraite:["La capitalisation ne touche pas les retraités actuels.","Baisse de la dépense publique non détaillée."],
+   indep:["50 règles supprimées dès l'élection, pas de surtransposition.","Peu de mesures propres aux indépendants à ce stade."],
+   jeune:["Part de retraite en capitalisation ; apprentissage soutenu.","Départ plus tardif (63 minimum, 65 taux plein, puis indexé)."],
+   parent:["Revenu familial de 240 €/mois dès le 1er enfant jusqu'à 18 ans.","Fusion de 12 aides : les familles qui en cumulaient plusieurs pourraient y perdre."],
+   pme:["40 Md€ de baisse de fiscalité, stabilité garantie 5 ans.","Arrêt des appels d'offres solaire et éolien en mer : marchés perdus pour ces filières."]
+  },
+  gagnants:["Entreprises (−40 Md€)","Filière nucléaire","Familles (240 €/mois dès le 1er enfant)"],
+  payeurs:["Actifs (63 et 65 ans)","Étrangers installés depuis moins de 5 ans","Filières solaire et éolien en mer"],
+  fin:{sens:"mixte", txt:"40 Md€ de baisse de fiscalité des entreprises dès le début du mandat, à compenser par une baisse de la dépense publique encore non détaillée. Sans économies équivalentes, le déficit se creuserait d'abord."},
+  eur:"Reste dans le cadre européen : réciprocité commerciale, coalition pro-nucléaire, recours devant la CJUE contre les excès de la Commission.",
+  feas:[["Âge minimal à 63 ans, taux plein à 65","loi"],["Abroger le volet électricité de la PPE3","decret"],["Supprimer le ZAN","loi"],["Retirer le principe de précaution","constit"],["Prestations après 5 ans de résidence","loi"],["Clauses de réciprocité commerciale","ue"]],
+  jours:"Suppression de 50 règles « dès le lendemain de l'élection », baisse fiscale « dès l'entame », abrogation immédiate du volet électricité de la PPE3.",
+  pro:["Plus de travail et moins de charges pour relancer la production","Nucléaire assumé, énergie pilotable et moins chère selon ses soutiens","Allocation familiale simplifiée dès le premier enfant"],
+  con:["Départ plus tardif et capitalisation : risque pour les carrières pénibles et les pensions futures","Arrêt des renouvelables critiqué par les filières et les écologistes","Fin du ZAN et du principe de précaution : recul environnemental selon ses critiques"],
+  q:["Volets sécurité et santé encore à publier","Comment financer 40 Md€ de baisse d'impôts tout en réduisant le déficit ?"]
+ },
+ {id:"roussel", nom:"Fabien Roussel", ini:"FR", col:"#5A7184", parti:"Parti communiste français", famille:"Gauche", sondage:"2 %",
+  statut:"Désigné par les militants à 72 % le 6 septembre 2026. Mesures reprises de son programme 2022 « La France des jours heureux », en attendant le programme 2027.",
+  src:{label:"Programme 2022 (PDF)", url:"https://d3n8a8pro7vhmx.cloudfront.net/fabienroussel2022/pages/217/attachments/original/1643038967/exe_la_france_des_jours_heureux_LIVRE_stc.pdf"},
+  real:{fin:"non", ue:"rupture", cons:"non", def:"up"},
+  t:{
+   retraites:["Retraite à 60 ans à taux plein"],
+   travail:["Semaine de 32 heures sans baisse de salaire","Carburant bloqué à 1,60 €/l","Électricité et gaz −30 %"],
+   fiscalite:["ISF rétabli et renforcé","Nationaliser BNP Paribas, Société générale et Axa"],
+   budget:["500 000 emplois publics","Fin des cabinets de conseil","Fin de la règle des 3 % de déficit"],
+   immigration:["« Politique d'humanité », voies légales et sécurisées","Dispositif pour les mineurs non accompagnés"],
+   securite:["Refonder l'organisation de la police","Plan de sauvetage de la justice","Abroger les lois jugées liberticides"],
+   europe:["Quitter l'OTAN","Signer le traité d'interdiction des armes nucléaires","BCE sous contrôle politique"],
+   energie:["Pôle public : TotalEnergies et Engie nationalisés avec EDF","Nucléaire civil et renouvelables","140 Md€ par an pour le climat ; transports publics gratuits"],
+   education:["Revenu étudiant de 850 €/mois","Pas de sélection à l'université","Bac pro possible en 4 ans"],
+   sante:["Plan pour l'hôpital public","Pôle public du médicament","Loi-cadre pour la psychiatrie"],
+   institutions:["Loi contre la concentration des médias","Égalité salariale dans la fonction publique en 6 mois"]
+  },
+  profils:{
+   smic:["32 h payées 35, carburant à 1,60 €/l, électricité et gaz −30 %.","Blocage des prix : coût pour l'État et risque de pénuries selon ses critiques."],
+   cadre:["Retraite à 60 ans à taux plein.","ISF rétabli et renforcé pour les patrimoines concernés."],
+   retraite:["Énergie moins chère, hôpital public renforcé.","Pas de hausse générale des pensions détaillée."],
+   indep:["Électricité et gaz −30 % pour les entreprises aussi.","Nationalisations et dépense publique en forte hausse : financement incertain."],
+   jeune:["Revenu étudiant de 850 €/mois, pas de sélection à l'université.","Financement de ce revenu (plusieurs milliards par an) non précisé."],
+   parent:["Transports publics gratuits, harcèlement scolaire grande cause nationale.","Mesures familiales peu détaillées."],
+   pme:["Énergie −30 %.","32 h payées 35 : coût horaire du travail en hausse d'environ 9 %."]
+  },
+  gagnants:["Salariés (32 h)","Consommateurs d'énergie","Étudiants (850 €/mois)"],
+  payeurs:["Actionnaires des groupes nationalisés (indemnisés)","Grandes fortunes","Budget de l'État"],
+  fin:{sens:"depense", txt:"500 000 emplois publics, 140 Md€ par an pour le climat, revenu étudiant, nationalisation de groupes pesant ensemble plusieurs centaines de milliards d'euros en Bourse, avec indemnisation obligatoire. Recette principale : ISF renforcé. Chiffres de 2022."},
+  eur:"Sortie de l'OTAN, signature du traité d'interdiction des armes nucléaires (incompatible avec la dissuasion actuelle), fin des 3 % et BCE sous contrôle politique.",
+  feas:[["Retraite à 60 ans, 32 heures","loi"],["Nationalisations","loi"],["Blocage du prix des carburants","decret"],["Sortie de l'OTAN","exec"],["Traité d'interdiction des armes nucléaires","exec"],["Fin de l'indépendance de la BCE","ue"]],
+  jours:"Programme 2022 : égalité salariale dans la fonction publique en 6 mois, levée des brevets sur les vaccins dès les premières semaines.",
+  pro:["Une gauche du travail et des salaires, qui défend aussi le nucléaire","Baisse directe des prix de l'énergie et du carburant","Services publics renforcés sur tout le territoire"],
+  con:["Nationalisations et 32 h : coût et effets économiques jugés très lourds","Sortie de l'OTAN et traité anti-nucléaire incompatibles avec la dissuasion","Blocage des prix : pénuries et coût budgétaire"],
+  q:["Programme 2027 non publié ; ces mesures datent de 2022, avant la hausse des taux"]
+ },
+ {id:"tondelier", nom:"Marine Tondelier", ini:"MT", col:"#9C4F96", parti:"Les Écologistes", famille:"Gauche écologiste", sondage:"2 à 6 %",
+  statut:"Candidate désignée. Les adhérents voteront du 10 au 13 décembre 2026 pour maintenir sa candidature ou rallier un autre candidat de gauche.",
+  src:{label:"lesecologistes.fr", url:"https://lesecologistes.fr/pages/6ImK65GKUnvibm33WGkjkj/projet-2027"},
+  real:{fin:"non", ue:"ok", cons:"non", def:"up"},
+  t:{
+   retraites:[],
+   travail:["Salaire minimum à 2 000 € brut dès 2027","Encadrement des loyers généralisé","Prix encadrés sur un panier de biens essentiels"],
+   fiscalite:["Fiscalité des grandes fortunes rétablie","Prêt à taux zéro aux PME pour réduire leurs émissions"],
+   budget:["Budget de l'UE porté à 2 % du PIB européen en 2035"],
+   immigration:["Droit du sol garanti quelle que soit la situation des parents","Accès à l'AME et à la PUMA, fin des délais de carence","Fin des refoulements illégaux","Voies légales via la révision du Pacte européen"],
+   securite:["Police de proximité, fin de la politique du chiffre","Fin des contrôles d'identité aléatoires","Numerus clausus en prison","9 000 magistrats et 10 000 greffiers en plus sur 10 ans","Cannabis légalisé et encadré"],
+   europe:["Soutien politique et militaire à l'Ukraine","Arrêt des importations de gaz, uranium et engrais russes","Initiative de désarmement nucléaire avec le Royaume-Uni"],
+   energie:["7 Md€ par an pour l'adaptation au climat d'ici 2032","Moratoire sur les mégabassines","110 km/h sur autoroute pour les thermiques","21 % de bio en 2030 ; 120 000 km de pistes cyclables en 2032"],
+   education:["19 élèves par classe en primaire, 12 en éducation prioritaire","Remplacer Parcoursup et MonMaster","+15 % pour les enseignants en 5 ans","Garantie d'autonomie dès 18 ans"],
+   sante:["Interdire PFAS et perturbateurs endocriniens","2 000 centres de santé d'ici 2030","Soins essentiels remboursés à 100 %","Droit à mourir dans la dignité"],
+   institutions:["Proportionnelle intégrale","Loi anti-concentration des médias","Loi de 3 Md€ contre les violences sexistes et sexuelles ; AAH +250 €"]
+  },
+  profils:{
+   smic:["Salaire minimum à 2 000 € brut dès 2027 (+133 € brut par mois).","Coût du travail en hausse pour les employeurs."],
+   cadre:["Loyers et prix de l'énergie encadrés.","Fiscalité des grandes fortunes selon ton patrimoine ; 110 km/h sur autoroute."],
+   retraite:["Soins essentiels à 100 %, 2 000 centres de santé.","Position sur l'âge de départ non trouvée."],
+   indep:["Prêt à taux zéro pour investir dans la décarbonation.","Prix encadrés sur des biens essentiels : moins de liberté tarifaire dans certains secteurs."],
+   jeune:["Garantie d'autonomie dès 18 ans, fin de Parcoursup.","Mesures non chiffrées dans leur ensemble."],
+   parent:["Classes de 19 élèves (12 en éducation prioritaire), cantine sans ultra-transformés.","Coût des recrutements d'enseignants non chiffré."],
+   pme:["Prêt à taux zéro pour réduire les émissions.","Salaire minimum relevé ; PFAS interdits sous 18 mois : adaptation coûteuse pour certaines industries."]
+  },
+  gagnants:["Bas salaires et locataires","Santé environnementale (PFAS)","Usagers du vélo et des transports"],
+  payeurs:["Grandes fortunes","Automobilistes (110 km/h)","Industries utilisant des PFAS"],
+  fin:{sens:"depense", txt:"Salaire minimum, recrutements massifs (justice, école, santé), adaptation climatique à 7 Md€ par an, loi VSS à 3 Md€. Recettes : fiscalité des grandes fortunes. Pas de chiffrage global trouvé."},
+  eur:"Soutien militaire à l'Ukraine dans ses frontières de 1991, budget européen relevé, désarmement nucléaire multilatéral avec le Royaume-Uni.",
+  feas:[["Salaire minimum à 2 000 € brut","decret"],["110 km/h sur autoroute","decret"],["Proportionnelle intégrale","loi"],["Légalisation du cannabis","loi"],["Interdiction des PFAS","ue"],["Encadrement des prix","loi"]],
+  jours:"Salaire minimum à 2 000 € brut dès 2027.",
+  pro:["Écologie du quotidien : santé, alimentation, logement, transports","Hausse des bas salaires, protection des locataires","Soutien ferme à l'Ukraine et indépendance vis-à-vis de la Russie"],
+  con:["Nombreuses dépenses nouvelles sans chiffrage global","Encadrement des prix et loyers : risque de baisse de l'offre selon les économistes libéraux","110 km/h, cannabis légal, fin des contrôles aléatoires : mesures clivantes"],
+  q:["Sa candidature sera-t-elle maintenue après le vote de décembre ?","Position sur l'âge de la retraite non retrouvée"]
+ },
+ {id:"zemmour", nom:"Éric Zemmour", ini:"EZ", col:"#8A8A2E", parti:"Reconquête", famille:"Extrême droite", sondage:"5 %",
+  statut:"Candidat déclaré le 17 septembre 2026. Mesures reprises du programme européen 2024 de Reconquête, en attendant le programme présidentiel.",
+  src:{label:"Programme Reconquête 2024 (PDF)", url:"https://assets.ericzemmour.fr/document/Programme%20Reconqu%C3%AAte%20Europ%C3%A9ennes%202024.pdf"},
+  real:{fin:"non", ue:"rupture", cons:"core", def:"unc"},
+  t:{
+   retraites:[],
+   travail:["Une norme créée, deux supprimées","Taxes sur l'énergie réduites, sortie des règles du marché européen de l'électricité"],
+   fiscalite:["Mesures natalistes : prêts à taux zéro, primes de naissance, abattements"],
+   budget:["Contribution à l'UE −20 %, plafonnée à 20 Md€","Moitié des agences européennes supprimées"],
+   immigration:["Quitter la Convention européenne des droits de l'homme","Renvoyer tous les étrangers détenus et délinquants","Fin des subventions aux ONG d'aide aux migrants","Interdire les Frères musulmans","AME remplacée par une aide d'urgence"],
+   securite:["Coordination européenne anti-drogue dans les ports et aéroports","Sanctions contre les pays liés aux cartels"],
+   europe:["Commission remplacée par un secrétariat sous l'autorité des États","Primauté du droit national sur le droit européen","Refus de tout élargissement, de l'armée européenne et du partage de la dissuasion","Droits de douane à 50 % sur les voitures électriques chinoises"],
+   energie:["Maintenir la vente de voitures thermiques après 2035","Plus de financement public de l'éolien","Plan nucléaire européen de 500 Md€"],
+   education:["Erasmus réservé aux Européens","Prévention contre drogues, écrans et pornographie"],
+   sante:["1 000 médecins salariés de l'État dans les déserts médicaux","Gardes obligatoires pour les médecins","Trois jours de carence pour les fonctionnaires"],
+   institutions:["Abolition de la GPA dans l'UE","Liberté d'expression la plus large possible"]
+  },
+  profils:{
+   smic:["Taxes sur l'énergie réduites.","Pas de mesure salariale détaillée."],
+   cadre:["Voiture thermique préservée après 2035.","Programme fiscal non publié."],
+   retraite:["Médecins salariés dans les déserts médicaux.","Position sur les retraites non publiée."],
+   indep:["Une norme créée, deux supprimées.","Droits de douane et moratoire sur le libre-échange : achats importés plus chers."],
+   jeune:["Prévention des addictions aux écrans et aux drogues.","Erasmus réservé aux Européens ; sortie de la CEDH, donc plus de recours possible à Strasbourg."],
+   parent:["Aides natalistes : prêts à taux zéro, primes de naissance.","Montants non précisés."],
+   pme:["Moins de normes.","Contrôles portuaires accrus et droits de douane : échanges ralentis, ce que le programme assume."]
+  },
+  gagnants:["Filières nucléaire et automobile thermique","Familles (aides natalistes)","Territoires ruraux (médecins salariés)"],
+  payeurs:["Étrangers (AME, expulsions, ONG)","Entreprises importatrices","Fonctionnaires (jours de carence)"],
+  fin:{sens:"mixte", txt:"Économies sur la contribution à l'UE (−20 %) et l'AME. Dépenses : médecins salariés, aides natalistes, part française d'un plan nucléaire européen de 500 Md€. Programme présidentiel non chiffré."},
+  eur:"Transformation radicale : Commission supprimée, primauté du droit national, sortie de la CEDH, refus de tout élargissement. La modification des traités exige l'unanimité des 27.",
+  feas:[["Quitter la CEDH","exec"],["Primauté du droit national (article 55)","constit"],["Supprimer la Commission européenne","ue"],["Thermique autorisé après 2035","ue"],["Supprimer l'AME","loi"]],
+  jours:"Programme présidentiel non publié.",
+  pro:["Rupture nette sur l'immigration, priorité de son électorat","Souveraineté nationale face aux institutions européennes","Nucléaire et voiture thermique préservés"],
+  con:["Sortie de la CEDH et primauté du droit national : appartenance à l'UE remise en cause selon ses critiques","Mesures jugées discriminatoires par les juristes et associations","Volet économique et social peu détaillé"],
+  q:["Programme 2027 non publié ; retraites et fiscalité à préciser"]
+ }
+];
+
+const OTHERS = [["Nathalie Arthaud","Lutte ouvrière"],["François Asselineau","UPR"],["Delphine Batho","Génération écologie"],["Olivier Becht","Apparenté Ensemble"],["Xavier Bertrand","Nous France · pressenti"],["Karim Bouamrane","Maire PS de Saint-Ouen"],["Juan Branco","Candidat citoyen"],["Bernard Cazeneuve","La Convention"],["Nicolas Dupont-Aignan","Debout la France"],["François Hollande","Pressenti"],["Anasse Kazib","Révolution permanente"],["Selma Labib","NPA-Révolutionnaires"],["Florian Philippot","Les Patriotes"],["Natacha Polony","Déclarée le 14 octobre"],["François Ruffin","Debout !"],["Dominique de Villepin","La France humaniste"]];
+
+const POLLS = [["lepen",35],["melenchon",18],["philippe",13],["glucksmann",10],["retailleau",7],["attal",5],["zemmour",5],["roussel",2],["Autres",5]];
+const DUELS = [["philippe","lepen",46,54],["attal","lepen",44,56],["glucksmann","lepen",43,57],["retailleau","lepen",42,58],["melenchon","lepen",33,67],["melenchon","philippe",39,61]];
+
+const AGES = [["melenchon",60,60,"60 ans, 40 annuités"],["roussel",60,60,"60 ans à taux plein"],["lepen",60,62,"60 ans carrières longues, 62 visé"],["retailleau",63,65,"63 min., 65 taux plein"],["philippe",65,65,"65 ans et 45 annuités"],["lisnard",65,65,"pension minimale à 65"]];
+const AGES_OTHER = [["attal","Plus d'âge légal : durée cotisée, décote et surcote"],["glucksmann","Abrogation des 64 ans, âge modulé selon l'espérance de vie en bonne santé"],["tondelier","Non détaillé"],["zemmour","Non détaillé"]];
+
+const LOG = [
+ ["02/11/2026","Ajout de l'onglet « La situation actuelle » (dette, déficit, taux, croissance, chômage, retraites) et du test de réalisme appliqué à chaque candidat."],
+ ["02/11/2026","Nouveau design. Conséquences approfondies : effets par profil, gagnants et payeurs, finances publiques, Europe, voie juridique, calendrier annoncé."],
+ ["01/11/2026","Ajout de la fiche de David Lisnard."],
+ ["01/11/2026","Création de la page."]
+];
+
+const SOURCES = [
+ ["Votons-2027 — programmes sourcés par candidat","https://votons-2027.fr/candidats"],
+ ["Idéal Investisseur — budget 2027, OAT, charge de la dette (2 oct. 2026)","https://www.ideal-investisseur.fr/eco-politique/budget-2027-le-deficit-maintenu-a-5-loat-10-ans-au-plus-haut-depuis-2002-33951.html"],
+ ["La finance pour tous — croissance, inflation et chômage selon l'Insee (sept. 2026)","https://www.lafinancepourtous.com/2026/09/15/leconomie-francaise-decroche-baisse-de-la-croissance-inflation-en-hausse-et-retour-du-chomage/"],
+ ["Europe 1 — chômage à 8,1 % au 1er trimestre 2026","https://www.europe1.fr/societe/chomage-le-taux-grimpe-a-81-au-premier-trimestre-2026-un-plus-haut-depuis-cinq-ans-934169"],
+ ["Conseil d'orientation des retraites — rapport annuel 2026 (synthèse)","https://www.cor-retraites.fr/sites/default/files/2026-06/Synth%C3%A8se_RA_2026.pdf"],
+ ["Cryptoast — écart de taux France-Allemagne","https://cryptoast.fr/?p=230868"],
+ ["Euronews — Philippe mise sur le travail et la réduction des dépenses (9 oct. 2026)","https://fr.euronews.com/2026/10/09/presidentielle-2027-edouard-philippe-mise-sur-le-travail-et-la-reduction-des-depenses-publ"],
+ ["LCP — programme de Glucksmann","https://lcp.fr/actualites/presidentielle-raphael-glucksmann-devoile-les-premieres-lignes-de-son-possible-programme"],
+ ["LCP — Retailleau : âge minimal à 63 ans, taux plein à 65","https://lcp.fr/actualites/retraites-bruno-retailleau-veut-un-age-minimal-de-depart-a-63-ans-et-un-taux-plein-a-65"],
+ ["Public Sénat — les candidats et les retraites","https://www.publicsenat.fr/actualites/politique/reculer-ou-avancer-lage-legal-avec-ou-sans-capitalisation-ce-que-proposent-les-principaux-candidats-a-lelection-presidentielle-sur-les-retraites"],
+ ["L'Essentiel de l'éco — Bardella / Le Pen, chiffrage des retraites","https://lessentieldeleco.fr/8209-bardella-le-pen-la-rupture-est-consommee/"],
+ ["Le Club des juristes — candidature Le Pen après l'appel","https://www.leclubdesjuristes.com/en-bref/marine-le-pen-candidate-a-la-presidentielle-de-2027-malgre-sa-condamnation-en-appel-16843/"],
+ ["Nouvelle Énergie — programme de David Lisnard","https://www.unenouvelleenergie.fr/notre-programme/"],
+ ["Wizbii — montants du SMIC au 1er juin 2026","https://money.wizbii.com/advices/augmentation-smic-juin-2026"],
+ ["France-Vote — moyenne des sondages","https://www.france-vote.fr/sondages"],
+ ["2027.help — sondages Harris Interactive","https://2027.help/polls"],
+ ["Institut Montaigne — calendrier de chiffrage 2027","https://institutmontaigne.org/communiques-de-presse/presidentielle-2027-linstitut-montaigne-devoile-les-reperes-de-montaigne-25-recommandations-pour-la"],
+ ["Public Sénat — une dissolution avant 2027 ?","https://www.publicsenat.fr/actualites/politique/nouvelle-dissolution-avant-la-presidentielle-2027-une-instrumentalisation-de-la-constitution-que-rien-ninterdit"]
+];
+
+/* ---------- utilitaires ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store = {get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const byId = id => C.find(c=>c.id===id);
+const short = c => c.id==="lepen" ? "Le Pen" : c.nom.split(" ").slice(-1)[0];
+const av = (c,cls="") => `<span class="av ${cls}" style="--c:${c.col}" aria-hidden="true">${esc(c.ini)}</span>`;
+const list = arr => arr && arr.length ? "<ul>"+arr.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul>" : '<span class="empty">Non détaillé dans les sources consultées</span>';
+const ulist = arr => arr && arr.length ? '<ul class="list">'+arr.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul>" : '<span class="empty">Non détaillé</span>';
+const pill = (k,v) => { const [t,l]=REAL[k][v]; return `<span class="pill lv-${l}">${esc(t)}</span>`; };
+
+let theme = store.get("p27b-theme","retraites");
+let shown = store.get("p27b-shown", C.map(c=>c.id)).filter(id=>byId(id));
+{ const k=store.get("p27b-known",[]); C.forEach(c=>{ if(k.length && !k.includes(c.id) && !shown.includes(c.id)) shown.push(c.id); }); store.set("p27b-known", C.map(c=>c.id)); }
+let cand = store.get("p27b-cand","lepen"); if(!byId(cand)) cand="lepen";
+let prof = store.get("p27b-prof","smic"); if(!PROFILES.find(p=>p.id===prof)) prof="smic";
+
+/* ---------- rendu ---------- */
+function header(){
+  const d = Math.ceil((new Date(ELECTION+"T00:00:00") - new Date()) / 864e5);
+  $("#countdown").textContent = d > 0 ? "J−"+d : "Scrutin passé";
+  $("#updatedLine").textContent = "Dernière mise à jour : " + new Date(UPDATED+"T12:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  $("#faces").innerHTML = C.map(c=>`<button class="face" data-go="${c.id}">${av(c)}${esc(short(c))}</button>`).join("");
+}
+
+function renderSituation(){
+  $("#realBody").innerHTML = C.map(c=>`<tr><td class="who">${av(c)}<button class="open" data-go="${c.id}" style="color:var(--ink)">${esc(c.nom)}</button></td><td>${pill("fin",c.real.fin)}</td><td>${pill("ue",c.real.ue)}</td><td>${pill("cons",c.real.cons)}</td><td>${pill("def",c.real.def)}</td></tr>`).join("");
+}
+
+function renderMoi(){
+  $("#profiles").innerHTML = PROFILES.map(p=>`<button class="prof" aria-pressed="${p.id===prof}" data-p="${p.id}"><b>${esc(p.label)}</b><span>${esc(p.d)}</span></button>`).join("");
+  $("#moiGrid").innerHTML = C.map(c=>{
+    const [g,k] = c.profils[prof];
+    return `<article class="card ccard">
+      <header>${av(c)}<div><b>${esc(c.nom)}</b><span>${esc(c.parti)}</span></div></header>
+      <div class="gc"><div class="g"><span class="label">Ce que tu y gagnes</span>${esc(g)}</div><div class="c"><span class="label">La contrepartie</span>${esc(k)}</div></div>
+      <button class="open" data-go="${c.id}">Voir toutes les conséquences →</button>
+    </article>`;}).join("");
+}
+
+function agesChart(){
+  const W=720, L=110, R=24, top=34, rh=40, H=top+AGES.length*rh+18;
+  const x = a => L + (a-59.5)/(66.5-59.5)*(W-L-R);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Âge de départ proposé par candidat, comparé aux 64 ans actuels">`;
+  for(let a=60;a<=66;a++){ s+=`<line x1="${x(a)}" x2="${x(a)}" y1="${top-8}" y2="${H-16}" style="stroke:var(--line)" stroke-width="1"/><text x="${x(a)}" y="${top-14}" text-anchor="middle" style="fill:var(--muted);font:500 12px var(--f-mono)">${a}</text>`; }
+  s+=`<line x1="${x(64)}" x2="${x(64)}" y1="${top-8}" y2="${H-16}" style="stroke:var(--red)" stroke-width="2" stroke-dasharray="4 4"/><text x="${x(64)}" y="${H-2}" text-anchor="middle" style="fill:var(--red);font:600 12px var(--f-body)">loi actuelle : 64 ans</text>`;
+  AGES.forEach(([id,a,b,lab],i)=>{
+    const c=byId(id), y=top+i*rh+rh/2;
+    s+=`<text x="0" y="${y+5}" style="fill:var(--ink);font:600 14px var(--f-body)">${esc(short(c))}</text>`;
+    if(b>a) s+=`<line x1="${x(a)}" x2="${x(b)}" y1="${y}" y2="${y}" stroke="${c.col}" stroke-width="10" stroke-linecap="round" opacity=".35"/>`;
+    s+=`<circle cx="${x(a)}" cy="${y}" r="7" fill="${c.col}"/>`;
+    if(b>a) s+=`<circle cx="${x(b)}" cy="${y}" r="7" fill="${c.col}"/>`;
+    const right = x(b)+14 < W-190;
+    s+=`<text x="${right? x(b)+14 : x(a)-14}" y="${y+4}" text-anchor="${right?"start":"end"}" style="fill:var(--ink-2);font:13px var(--f-body)">${esc(lab)}</text>`;
+  });
+  return s+"</svg>";
+}
+
+function renderThemes(){
+  $("#themeChips").innerHTML = THEMES.map(t=>`<button class="chip" aria-pressed="${t.id===theme}" data-t="${t.id}">${esc(t.label)}</button>`).join("");
+  $("#candFilter").innerHTML = C.map(c=>`<button class="chip mini" aria-pressed="${shown.includes(c.id)}" data-c="${c.id}">${av(c)}${esc(short(c))}</button>`).join("");
+  const T = THEMES.find(t=>t.id===theme) || THEMES[0];
+  $("#themeIntro").innerHTML = `<h3>${esc(T.label)}</h3><p>${esc(T.intro)}</p>`;
+  $("#agesBlock").innerHTML = T.id==="retraites" ? `<div class="card ages"><div class="label">Âge de départ proposé</div><div class="scroll">${agesChart()}</div><div class="others">${AGES_OTHER.map(([id,t])=>`<span><b>${esc(short(byId(id)))}</b> · ${esc(t)}</span>`).join("")}</div></div>` : "";
+  const sel = C.filter(c=>shown.includes(c.id));
+  $("#cmpGrid").innerHTML = sel.length ? sel.map(c=>`<article class="card ccard"><header>${av(c)}<div><b>${esc(c.nom)}</b><span>${esc(c.parti)}</span></div></header>${list(c.t[T.id])}<button class="open" data-go="${c.id}">Fiche complète →</button></article>`).join("") : `<p class="empty">Sélectionne au moins un candidat.</p>`;
+}
+
+function renderCand(){
+  $("#pick").innerHTML = C.map(c=>`<button class="face" aria-pressed="${c.id===cand}" data-k="${c.id}">${av(c)}${esc(short(c))}</button>`).join("");
+  const c = byId(cand);
+  const dirLabel = {depense:"Dépenses nettes en hausse", economies:"Économies nettes visées", mixte:"Effet net incertain"}[c.fin.sens];
+  $("#fiche").innerHTML = `
+  <div class="card fhead">
+    ${av(c,"lg")}
+    <div><h2 class="serif">${esc(c.nom)}</h2>
+      <div class="meta"><span>${esc(c.parti)}</span><span>·</span><span>${esc(c.famille)}</span><span>·</span><span>Intentions de vote : <b>${esc(c.sondage)}</b></span><span>·</span><a href="${c.src.url}" target="_blank" rel="noopener">Programme officiel</a></div>
+    </div>
+    <p class="status">${esc(c.statut)}</p>
+  </div>
+
+  <div class="sect-title"><h3>Les conséquences</h3><span class="note">Même grille pour chaque candidat</span></div>
+  <div class="cgrid">
+    <div class="card blk span8">
+      <h4>Qui y gagne, qui paie</h4>
+      <div class="wl"><div class="w"><h4>Gagnants désignés par les mesures</h4>${ulist(c.gagnants)}</div><div class="l"><h4>Ceux qui paient ou perdent</h4>${ulist(c.payeurs)}</div></div>
+    </div>
+    <div class="card blk span4">
+      <h4>Comptes publics</h4>
+      <span class="dir ${c.fin.sens}">${dirLabel}</span>
+      <p style="margin:0;font-size:14.5px">${esc(c.fin.txt)}</p>
+    </div>
+    <div class="card blk span12">
+      <h4>Test de réalisme</h4>
+      <div class="cgrid" style="gap:10px">
+        <div class="span4" style="grid-column:span 3"><div class="label">Financement précisé</div><div style="margin-top:4px">${pill("fin",c.real.fin)}</div></div>
+        <div style="grid-column:span 3"><div class="label">Compatible avec l'UE</div><div style="margin-top:4px">${pill("ue",c.real.ue)}</div></div>
+        <div style="grid-column:span 3"><div class="label">Révision de la Constitution</div><div style="margin-top:4px">${pill("cons",c.real.cons)}</div></div>
+        <div style="grid-column:span 3"><div class="label">Effet sur le déficit</div><div style="margin-top:4px">${pill("def",c.real.def)}</div></div>
+      </div>
+    </div>
+    <div class="card blk span6">
+      <h4>Pour toi, selon ta situation</h4>
+      <div style="display:grid;gap:10px">${PROFILES.map(p=>{const [g,k]=c.profils[p.id];return `<div style="display:grid;gap:3px;border-bottom:1px solid var(--line);padding-bottom:9px"><b style="font-size:14px">${esc(p.label)}</b><span style="font-size:14px;color:var(--gain)">+ ${esc(g)}</span><span style="font-size:14px;color:var(--cost)">− ${esc(k)}</span></div>`}).join("")}</div>
+    </div>
+    <div style="display:grid;gap:14px;align-content:start" class="span6">
+      <div class="card blk">
+        <h4>Ce qu'il faut pour l'appliquer</h4>
+        <div class="feas">${c.feas.map(([m,v])=>`<div><span>${esc(m)}</span><span class="badge b-${v}">${FEAS[v]}</span></div>`).join("")}</div>
+      </div>
+      <div class="card blk"><h4>La France en Europe et dans le monde</h4><p style="margin:0;font-size:14.5px">${esc(c.eur)}</p></div>
+      <div class="card blk"><h4>Les premiers mois, tels qu'annoncés</h4><p style="margin:0;font-size:14.5px">${esc(c.jours)}</p></div>
+    </div>
+    <div class="card blk span12">
+      <h4>Le débat</h4>
+      <div class="debate"><div class="pro"><h4>Ce qu'avancent ses soutiens</h4>${ulist(c.pro)}</div><div class="con"><h4>Ce qu'objectent ses critiques</h4>${ulist(c.con)}</div></div>
+      <div class="qbox"><h4>Questions encore ouvertes</h4>${ulist(c.q)}</div>
+    </div>
+  </div>
+
+  <div class="sect-title"><h3>Le programme</h3><span class="note">Résumé par thème</span></div>
+  <div class="prog">${THEMES.map(t=>`<div class="card blk"><h4>${esc(t.label)}</h4>${list(c.t[t.id])}</div>`).join("")}</div>`;
+  // le test de réalisme passe sur 2 colonnes en petit écran
+  if (window.matchMedia("(max-width:700px)").matches) $("#fiche").querySelectorAll('[style*="span 3"]').forEach(el=>el.style.gridColumn="span 6");
+}
+
+function renderContext(){
+  $("#bars").innerHTML = POLLS.map(([id,v])=>{const c=byId(id); const n=c?short(c):id; const col=c?c.col:"var(--muted)"; return `<div class="bar"><span>${esc(n)}</span><div class="track" role="img" aria-label="${esc(n)} ${v} %"><div class="fill" style="width:${v/40*100}%;background:${col}"></div></div><span class="v mono">${v} %</span></div>`}).join("");
+  $("#duels").innerHTML = DUELS.map(([a,b,va,vb])=>{const A=byId(a),B=byId(b);return `<tr><td>${esc(short(A))} – ${esc(short(B))}<div class="split"><span style="width:${va}%;background:${A.col}"></span><span style="width:${vb}%;background:${B.col}"></span></div></td><td class="mono">${va} – ${vb}</td></tr>`}).join("");
+  $("#others").innerHTML = OTHERS.map(([n,s])=>`<div class="oth"><b>${esc(n)}</b><span>${esc(s)}</span></div>`).join("");
+}
+
+function renderMethod(){
+  $("#log").innerHTML = LOG.map(([d,t])=>`<li><span class="mono">${esc(d)}</span><span>${esc(t)}</span></li>`).join("");
+  $("#sources").innerHTML = SOURCES.map(([t,u])=>`<li><a href="${u}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join("");
+}
+
+const VIEWS = ["situation","moi","themes","candidats","contexte","methode"];
+function route(){
+  const h = location.hash.replace("#","");
+  const v = VIEWS.includes(h) ? h : "situation";
+  VIEWS.forEach(x=>{ $("#v-"+x).hidden = x!==v; });
+  document.querySelectorAll(".tabs-in a").forEach(a=>a.setAttribute("aria-current", a.getAttribute("href")==="#"+v ? "page" : "false"));
+}
+
+document.addEventListener("click", e=>{
+  const g = e.target.closest("[data-go]"); if(g){ cand=g.dataset.go; store.set("p27b-cand",cand); renderCand(); if(location.hash!=="#candidats") location.hash="candidats"; setTimeout(()=>$("#pick").scrollIntoView({block:"start"}),0); return; }
+  const p = e.target.closest("[data-p]"); if(p){ prof=p.dataset.p; store.set("p27b-prof",prof); renderMoi(); return; }
+  const t = e.target.closest("[data-t]"); if(t){ theme=t.dataset.t; store.set("p27b-theme",theme); renderThemes(); return; }
+  const c = e.target.closest("[data-c]"); if(c){ const id=c.dataset.c; shown = shown.includes(id) ? shown.filter(x=>x!==id) : C.map(x=>x.id).filter(x=>shown.includes(x)||x===id); store.set("p27b-shown",shown); renderThemes(); return; }
+  const k = e.target.closest("[data-k]"); if(k){ cand=k.dataset.k; store.set("p27b-cand",cand); renderCand(); }
+});
+window.addEventListener("hashchange", route);
+
+header(); renderSituation(); renderMoi(); renderThemes(); renderCand(); renderContext(); renderMethod(); route();
+</script>
+
+</body></html>
